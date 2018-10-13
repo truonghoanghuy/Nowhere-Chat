@@ -23,10 +23,11 @@ public class MainWindow {
         this.this_frame = f;
         tabbedPane.setSelectedIndex(0);
         list_friend.addListSelectionListener(new ListSelectionListener() {
-            @Override
+            //@Override
             public void valueChanged(ListSelectionEvent e) {
+                ChatPanel chat = new ChatPanel(list_friend.getSelectedValue().toString());
                 contentPanel.removeAll();
-                contentPanel.add(new ChatPanel(list_friend.getSelectedValue().toString()).getMainPanel());
+                contentPanel.add(chat.getMainPanel());
                 contentPanel.repaint();
                 contentPanel.revalidate();
             }
