@@ -14,6 +14,7 @@ public class MainWindow {
     private JPanel peoplePanel;
     private JPanel findPanel;
     private JList list_friend;
+    private JTable table1;
 
     public JPanel getMainPanel(){
         return this.mainPanel;
@@ -23,7 +24,7 @@ public class MainWindow {
         this.this_frame = f;
         tabbedPane.setSelectedIndex(0);
         list_friend.addListSelectionListener(new ListSelectionListener() {
-            @Override
+            //@Override
             public void valueChanged(ListSelectionEvent e) {
                 contentPanel.removeAll();
                 contentPanel.add(new ChatPanel(list_friend.getSelectedValue().toString()).getMainPanel());
@@ -33,28 +34,5 @@ public class MainWindow {
         });
     }
 
-    public static void main(String[] args) {
-        /*try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch (Exception e) {
 
-        }*/
-        /*MainWindow window = new MainWindow();
-        ChatPanel chat = new ChatPanel();
-
-        window.contentPanel.removeAll();
-        window.contentPanel.repaint();
-        window.contentPanel.revalidate();
-
-        window.contentPanel.add(chat.getMainPanel());
-        window.contentPanel.repaint();
-        window.contentPanel.revalidate();
-
-        JFrame frame = new JFrame("Nowhere Chat");
-        frame.setContentPane(window.mainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-        frame.pack();*/
-    }
 }
