@@ -29,7 +29,7 @@
         <counts>
           <entry key="form" value="6" />
           <entry key="iml" value="1" />
-          <entry key="java" value="23" />
+          <entry key="java" value="26" />
           <entry key="jfd" value="2" />
         </counts>
       </usages-collector>
@@ -37,7 +37,7 @@
         <counts>
           <entry key="GUI_DESIGNER_FORM" value="6" />
           <entry key="IDEA_MODULE" value="1" />
-          <entry key="JAVA" value="23" />
+          <entry key="JAVA" value="26" />
           <entry key="JFormDesigner_form" value="2" />
         </counts>
       </usages-collector>
@@ -55,11 +55,41 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/NowhereChat.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+            <state relative-caret-position="168">
+              <caret line="10" column="31" lean-forward="true" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/client/Client_Socket.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="74">
+              <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/gui/ChatPanel.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="189">
+              <caret line="57" column="57" selection-start-line="57" selection-start-column="56" selection-end-line="57" selection-end-column="57" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/Server_Socket.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1113">
+              <caret line="57" column="32" selection-start-line="57" selection-start-column="32" selection-end-line="57" selection-end-column="32" />
             </state>
           </provider>
         </entry>
@@ -96,7 +126,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1346" />
@@ -120,6 +150,37 @@
               <item name="Chat Application" type="b2602c69:ProjectViewProjectNode" />
               <item name="Chat Application" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Chat Application" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Chat Application" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Chat Application" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Chat Application" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Chat Application" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Chat Application" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="gui" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Chat Application" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Chat Application" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="gui" type="462c0819:PsiDirectoryNode" />
+              <item name="ChatPanel" type="e9f4de52:FormNode" />
+            </path>
+            <path>
+              <item name="Chat Application" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Chat Application" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -239,7 +300,7 @@
     <frame x="-8" y="-8" width="1382" height="754" extended-state="7" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24962178" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24962178" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -248,7 +309,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49848714" visible="true" weight="0.36774194" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49848714" weight="0.36774194" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -256,7 +317,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5015129" side_tool="true" weight="0.36774194" />
       <window_info anchor="bottom" id="Version Control" order="9" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.32903227" />
+      <window_info anchor="bottom" id="Messages" order="10" visible="true" weight="0.32903227" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -348,34 +409,6 @@
     <entry file="file://$PROJECT_DIR$/src/gui/ChatPanel.form">
       <provider selected="true" editor-type-id="ui-designer" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/gui/ChatPanel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="57" column="57" selection-start-line="57" selection-start-column="56" selection-end-line="57" selection-end-column="57" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#984#1689#0" expanded="true" />
-            <element signature="e#1688#1689#0" expanded="true" />
-            <element signature="e#2044#2045#0" expanded="true" />
-            <element signature="e#2081#2082#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/Client_Socket.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="29" column="49" lean-forward="true" selection-start-line="29" selection-start-column="49" selection-end-line="29" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/Server_Socket.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="26" column="40" lean-forward="true" selection-start-line="26" selection-start-column="40" selection-end-line="26" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
@@ -383,10 +416,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/Server_Socket.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1113">
+          <caret line="57" column="32" selection-start-line="57" selection-start-column="32" selection-end-line="57" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/NowhereChat.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+        <state relative-caret-position="168">
+          <caret line="10" column="31" lean-forward="true" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/Client_Socket.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="74">
+          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/gui/ChatPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="57" column="57" selection-start-line="57" selection-start-column="56" selection-end-line="57" selection-end-column="57" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
