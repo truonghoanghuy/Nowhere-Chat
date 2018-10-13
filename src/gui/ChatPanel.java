@@ -21,7 +21,6 @@ public class ChatPanel {
     public JTextField textField3;
     private JButton connectButton;
     private JLabel friendNameLabel;
-    private user user;
 
     public Server_Socket server;
     public Client_Socket client;

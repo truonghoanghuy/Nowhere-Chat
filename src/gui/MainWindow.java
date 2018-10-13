@@ -3,8 +3,12 @@ package gui;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import server.ReceiveRequest;
 
 public class MainWindow {
+    //info
+    private ReceiveRequest receiveRequest;
+    //system
     private JFrame this_frame;
     private JPanel mainPanel;
     private JTabbedPane tabbedPane;
