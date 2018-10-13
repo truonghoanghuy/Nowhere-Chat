@@ -29,7 +29,7 @@ public class Server_Socket {
                 }
             }
             catch (Exception e) {
-
+                e.printStackTrace();
             }
         }
     }
