@@ -75,6 +75,9 @@ public class SelectRecords {
         }
         return false;
     }
+
+
+
     public void selectAll(){
         String sql = "SELECT * FROM usersinfo";
 
