@@ -9,7 +9,8 @@ import java.sql.*;
 public class SelectRecords {
     private Connection connect() {
         // SQLite connection string
-        String url =  "jdbc:sqlite:" + "Data.db";
+        String workingDir = System.getProperty("user.dir");
+        String url = "jdbc:sqlite:" + workingDir + "/Data.db";
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url);
@@ -75,6 +76,9 @@ public class SelectRecords {
         }
         return false;
     }
+
+
+
     public void selectAll(){
         String sql = "SELECT * FROM usersinfo";
 
