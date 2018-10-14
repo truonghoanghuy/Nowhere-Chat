@@ -8,7 +8,9 @@ import java.sql.SQLException;
 public class InsertRecords {
     private Connection connect() {
         // SQLite connection string
-        String url = "jdbc:sqlite:D://MMT/Assignment1/Chat Application/Data.db";
+        String workingDir = System.getProperty("user.dir");
+        String url = "jdbc:sqlite:" + workingDir + "/Data.db";
+//        String url = "jdbc:sqlite:D://MMT/Assignment1/Chat Application/Data.db";
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url);
@@ -38,7 +40,35 @@ public class InsertRecords {
             System.out.println(e.getMessage());
         }
     }
+    public void insertfriend(String user_name1,String user_name2) {
+        String sql = "INSERT INTO friendship(user_name1,user_name2) VALUES(?,?)";
+        try{
+            Connection conn = this.connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, user_name1);
+            pstmt.setString(2, user_name2);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
+//    public static void main(String[] args) {
+//// name,user_name,email,password,gender,phonenumber,ip_addr,port,status) VALUES(?,?,?,?,?,?,?,?,?)";
+//        InsertRecords app = new InsertRecords();
+//        //app.insertfriend("ngocanh","huyle1212");
+//        //app.insertfriend("ngocanh","thaoanhto");
+//        app.insertfriend("ngocanh","singmysong");
+//        app.insertfriend("huyle1212","hoanghuy3");
+//        //app.insertfriend("ngocanh","admin");
+//
+//        // insert three new rows
+////        app.insert("Aryan", "irenren","abc@gmail.com","123123","Male","016728374","198.1.21.2","2134",true);
+////        app.insert("Daniel", "daniel","abcbc@gmail.com","12a31a23","Male","0167238374","198.1.21.10","2234",true);
+////        app.insert("Bamm", "binbam","binbam@gmail.com","qwqwqw","Other","0163338374","198.1.33.2","3334",false);
+//
+//
+//    }
 //    public static void main(String[] args) {
 //// name,user_name,email,password,gender,phonenumber,ip_addr,port,status) VALUES(?,?,?,?,?,?,?,?,?)";
 //        InsertRecords app = new InsertRecords();
