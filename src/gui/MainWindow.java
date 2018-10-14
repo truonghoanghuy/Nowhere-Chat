@@ -3,6 +3,8 @@ package gui;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.sql.*;
 public class MainWindow {
@@ -16,6 +18,7 @@ public class MainWindow {
     private JPanel findPanel;
     private JList recent_chat;
     private JList listfriend;
+    private JButton hometxt;
     // private JTable friend;
 
     public JPanel getMainPanel(){
@@ -23,7 +26,10 @@ public class MainWindow {
     }
     private Connection connect() {
         // SQLite connection string
-        String url = "jdbc:sqlite:D://MMT/Assignment1/Chat Application/Data.db";
+        String workingDir = System.getProperty("user.dir");
+        String url = "jdbc:sqlite:" + workingDir + "/Data.db";
+        //String url = "jdbc:sqlite:$project_dir$/Data.db";
+
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url);
@@ -76,6 +82,16 @@ public class MainWindow {
                 contentPanel.add(new ChatPanel(listfriend.getSelectedValue().toString()).getMainPanel());
                 contentPanel.repaint();
                 contentPanel.revalidate();
+            }
+        });
+        hometxt.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new JFrame("Nowhere Chat");
+                frame.setContentPane(new LoginWindow(frame).getMainPanel());
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(800, 500);
+                frame.setVisible(true);
+                this_frame.dispose();
             }
         });
     }
