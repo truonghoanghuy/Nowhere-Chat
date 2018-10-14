@@ -78,4 +78,10 @@ public class InsertRecords {
 //        app.insert("Bamm", "binbam","binbam@gmail.com","qwqwqw","Other","0163338374","198.1.33.2","3334",Boolean.FALSE);
 //
 //    }
+//    public static void main(String[] args) {
+//        InsertRecords app = new InsertRecords();
+//        app.insertfriend("ngocanh", "lucky");
+//        app.insertfriend("ngocanh", "daniel");
+//        app.insertfriend("ngocanh", "binbam");
+//    }
 }

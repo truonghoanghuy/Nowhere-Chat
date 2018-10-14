@@ -6,11 +6,14 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
-import java.sql.*;
+import signup.SelectRecords;
+import data.*;
+import java.util.List;
+
 public class MainWindow {
     //info
-    private ReceiveRequest receiveRequest;
-    //system
+    private user owner;
+    //do not modify
     private JFrame this_frame;
     private JPanel mainPanel;
     private JTabbedPane tabbedPane;
@@ -27,50 +30,28 @@ public class MainWindow {
     public JPanel getMainPanel(){
         return this.mainPanel;
     }
-    private Connection connect() {
-        // SQLite connection string
-        String workingDir = System.getProperty("user.dir");
-        String url = "jdbc:sqlite:" + workingDir + "/Data.db";
-        //String url = "jdbc:sqlite:$project_dir$/Data.db";
 
-        Connection conn = null;
-        try {
-            conn = DriverManager.getConnection(url);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+    public void friendship(String username) {
+        SelectRecords sl = new SelectRecords();
+        List<user> friends = sl.selectFriend(username);
+        DefaultListModel<user> dml = new DefaultListModel<>();
+        for (user frd : friends) {
+            dml.addElement(frd);
         }
-        return conn;
-    }
-    public void friendship(String namecheck1){
-        String sql = "SELECT user_name2 as 'User_name' FROM friendship  WHERE user_name1 = '"+ namecheck1+"'";
-
-        try {
-            Connection conn = this.connect();
-            Statement stmt  = conn.createStatement();
-            ResultSet rs    = stmt.executeQuery(sql);
-
-            DefaultListModel dml = new DefaultListModel();
-            while (rs.next()){
-                String uname = rs.getString("User_name");
-                dml.addElement(uname);
-            }
-            listfriend.setModel(dml);
-            //friend.setModel(DbUtils.resultSetToTableModel(rs));
-
-            // loop through the result set
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        listfriend.setCellRenderer(new UserRenderer());
+        listfriend.setModel(dml);
     }
 
     public MainWindow(JFrame f,String username) {
+        SelectRecords sl = new SelectRecords();
+        this.owner = sl.findUser(username);
+        //this.owner.updateIPandPort(3001);
         this.this_frame = f;
         tabbedPane.setSelectedIndex(0);
         recent_chat.addListSelectionListener(new ListSelectionListener() {
             //@Override
             public void valueChanged(ListSelectionEvent e) {
-                ChatPanel chat = new ChatPanel(recent_chat.getSelectedValue().toString());
+                ChatPanel chat = new ChatPanel(owner, (user)recent_chat.getSelectedValue());
                 contentPanel.removeAll();
                 contentPanel.add(chat.getMainPanel());
                 contentPanel.repaint();
@@ -83,7 +64,7 @@ public class MainWindow {
         listfriend.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
                 contentPanel.removeAll();
-                contentPanel.add(new ChatPanel(listfriend.getSelectedValue().toString()).getMainPanel());
+                contentPanel.add(new ChatPanel(owner, (user)listfriend.getSelectedValue()).getMainPanel());
                 contentPanel.repaint();
                 contentPanel.revalidate();
             }

@@ -8,8 +8,6 @@ import server.Server_Socket;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 public class ChatPanel {
     private ChatPanel this_chat_panel;
@@ -28,7 +26,7 @@ public class ChatPanel {
     public boolean isServer = false;
     public boolean isClient = false;
 
-    public ChatPanel(String name) {
+    public ChatPanel(user owner, user frd) {
         //this.friendNameLabel.setText(name);
 
         connectButton.addActionListener(new ActionListener() {

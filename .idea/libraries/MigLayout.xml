@@ -4,6 +4,7 @@
       <root url="jar://$PROJECT_DIR$/lib/miglayout-swing.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/miglayout-core.jar!/" />
       <root url="jar://D:/Setup File/sqlite-jdbc-3.23.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../sqlite-jdbc-3.23.1.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$PROJECT_DIR$/lib/miglayout-swing-javadoc.jar!/" />
