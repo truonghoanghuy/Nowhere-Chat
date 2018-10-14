@@ -6,6 +6,7 @@ import gui.MainWindow;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import client.CommonClient;
 
 public class signup {
     private JLabel label1;
@@ -35,7 +36,7 @@ public class signup {
                     if (!app.selectCheck(txtusername.getText()))
                         JOptionPane.showMessageDialog(null, "Username is already exists and used, please type another one");
                     else {
-                        InsertRecords ins = new InsertRecords();
+                        CommonClient ins = new CommonClient();
                         if (maleRadioButton.isSelected())
                             ins.insert(txtName.getText(), txtusername.getText(), txtemail.getText(), txtpassword.getText(), "Male", phone.getText(), "198.1.21.2", "2134", Boolean.TRUE);
                         else if (femaleRadioButton.isSelected())

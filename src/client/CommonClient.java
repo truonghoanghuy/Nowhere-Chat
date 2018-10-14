@@ -57,4 +57,26 @@ public class CommonClient {
         req.add(Integer.toString(port));
         this.requestServer(req);
     }
+    public void insertfriend(String username1, String username2) {
+        ArrayList<String> req = new ArrayList<>(3);
+        req.add("insertfriend");
+        req.add(username1);
+        req.add(username2);
+        this.requestServer(req);
+    }
+    public void insert(String name, String user_name,String email,String password,String gender,
+                       String phonenumber,String ip_addr,String port,Boolean status) {
+        ArrayList<String> req = new ArrayList<>(10);
+        req.add("insert");
+        req.add(name);
+        req.add(user_name);
+        req.add(email);
+        req.add(password);
+        req.add(gender);
+        req.add(phonenumber);
+        req.add(ip_addr);
+        req.add(port);
+        req.add(String.valueOf(status));
+        this.requestServer(req);
+    }
 }

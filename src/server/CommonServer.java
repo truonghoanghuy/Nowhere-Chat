@@ -1,6 +1,8 @@
 package server;
 import java.net.*;
 import java.io.*;
+
+import signup.InsertRecords;
 import signup.SelectRecords;
 import data.user;
 import signup.UpdateRecords;
@@ -11,9 +13,11 @@ import java.util.ArrayList;
 public class CommonServer {
     private SelectRecords sl;
     private UpdateRecords up;
+    private InsertRecords in;
     public CommonServer() {
         sl = new SelectRecords();
         up = new UpdateRecords();
+        in = new InsertRecords();
     }
     public boolean checkLogin(String username, String password) {
         return sl.Checklogin(username, password);
@@ -29,6 +33,13 @@ public class CommonServer {
     }
     public void setOnlineStatus(String username, boolean stat) {
         up.updateStatus(username, stat);
+    }
+    public void insertfriend(String username1, String username2) {
+        in.insertfriend(username1, username2);
+    }
+    public void insert(String name, String user_name,String email,String password,String gender,
+                       String phonenumber,String ip_addr,String port,Boolean status) {
+        in.insert(name, user_name, email, password, gender, phonenumber, ip_addr, port, status);
     }
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         CommonServer serv = new CommonServer();
@@ -56,6 +67,15 @@ public class CommonServer {
             }
             else if (req.get(0).equals("setonlinestatus")) {
                 serv.setOnlineStatus(req.get(1), Boolean.parseBoolean(req.get(2)));
+                os.writeObject(null);
+            }
+            else if (req.get(0).equals("insertfriend")) {
+                serv.insertfriend(req.get(1), req.get(2));
+                os.writeObject(null);
+            }
+            else if (req.get(0).equals("insert")) {
+                serv.insert(req.get(1), req.get(2), req.get(3), req.get(4), req.get(5),
+                        req.get(6), req.get(7), req.get(8), Boolean.parseBoolean(req.get(9)));
                 os.writeObject(null);
             }
             sock.close();
