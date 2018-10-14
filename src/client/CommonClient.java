@@ -42,4 +42,19 @@ public class CommonClient {
         req.add(username);
         return (List<user>)this.requestServer(req);
     }
+    public void setOnlineStatus(String username, boolean stat) {
+        ArrayList<String> req = new ArrayList<>(3);
+        req.add("setonlinestatus");
+        req.add(username);
+        req.add(String.valueOf(stat));
+        this.requestServer(req);
+    }
+    public void updateIPandPort(String username, String IP, int port) {
+        ArrayList<String> req = new ArrayList<>(4);
+        req.add("updateipandport");
+        req.add(username);
+        req.add(IP);
+        req.add(Integer.toString(port));
+        this.requestServer(req);
+    }
 }

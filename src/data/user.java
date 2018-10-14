@@ -3,7 +3,7 @@ package data;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.InetAddress;
-import signup.SelectRecords;
+import client.CommonClient;
 
 public class user implements Serializable {
     private int user_id;
@@ -46,8 +46,8 @@ public class user implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        SelectRecords sl = new SelectRecords();
-        sl.updateIPandPort(this.user_name, this.ip_address, this.port);
+        CommonClient cl = new CommonClient();
+        cl.updateIPandPort(this.user_name, this.ip_address, this.port);
     }
 
     public String getName() {

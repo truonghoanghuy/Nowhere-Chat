@@ -30,7 +30,7 @@ public class SelectRecords {
 
     public boolean selectCheck(String namecheck){
         String sql = "SELECT * FROM usersinfo  WHERE user_name = '"+ namecheck+"'";
-
+        boolean ans = true;
         try {
             Connection conn = this.connect();
             Statement stmt  = conn.createStatement();
@@ -48,17 +48,20 @@ public class SelectRecords {
 //                        rs.getString("ip_addr") + "\t"+
 //                        rs.getString("port")+ "\t"+
 //                        rs.getBoolean("status"));
-                return false;
+                ans = false;
             }
+            rs.close();
+            stmt.close();
+            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return true;
+        return ans;
     }
 
     public boolean Checklogin(String namecheck,String passw){
         String sql = "SELECT * FROM usersinfo  WHERE user_name = '"+ namecheck+"' and password = '"+passw+"'";
-
+        boolean ans = false;
         try {
             Connection conn = this.connect();
             Statement stmt  = conn.createStatement();
@@ -76,12 +79,15 @@ public class SelectRecords {
 //                        rs.getString("ip_addr") + "\t"+
 //                        rs.getString("port")+ "\t"+
 //                        rs.getBoolean("status"));
-                return true;
+                ans = true;
             }
+            rs.close();
+            stmt.close();
+            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return false;
+        return ans;
     }
 
 
@@ -107,6 +113,9 @@ public class SelectRecords {
                         rs.getString("port")+ "\t"+
                         rs.getBoolean("status"));
             }
+            rs.close();
+            stmt.close();
+            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -130,6 +139,9 @@ public class SelectRecords {
                         rs.getInt("port"),
                         rs.getBoolean("status"));
             }
+            rs.close();
+            stmt.close();
+            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -157,22 +169,13 @@ public class SelectRecords {
                     }
                 }
             }
+            rs.close();
+            stmt.close();
+            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return listFriends;
-    }
-
-    public void updateIPandPort(String username, String IP, int p) {
-        String sql = "UPDATE usersinfo SET ip_addr = '" + IP +"' and port = '" + Integer.toString(p) + "' WHERE user_name = '" + username + "'";
-        try {
-            Connection conn = this.connect();
-            Statement stmt = conn.createStatement();
-            stmt.executeUpdate(sql);
-        }
-        catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
     }
 
 //    public static void main(String[] args) {

@@ -36,6 +36,8 @@ public class InsertRecords {
             pstmt.setString(8, port);
             pstmt.setBoolean(9, status.booleanValue());
             pstmt.executeUpdate();
+            pstmt.close();
+            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -48,6 +50,8 @@ public class InsertRecords {
             pstmt.setString(1, user_name1);
             pstmt.setString(2, user_name2);
             pstmt.executeUpdate();
+            pstmt.close();
+            conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

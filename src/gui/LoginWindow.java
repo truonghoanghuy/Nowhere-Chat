@@ -29,8 +29,10 @@ public class LoginWindow {
                 if (username.getText().isEmpty() |passwordtxt.getText().isEmpty())
                     JOptionPane.showMessageDialog(null,"Please Enter Your User name and Password!");
                 else{
-                    if(client.login(username.getText(),passwordtxt.getText()))
+                    if(client.login(username.getText(),passwordtxt.getText())) {
+                        client.setOnlineStatus(username.getText(), true);
                         showMainWindow(username.getText());
+                    }
                     else
                         JOptionPane.showMessageDialog(null,"Please Enter Again!");
 

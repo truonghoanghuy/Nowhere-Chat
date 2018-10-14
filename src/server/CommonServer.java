@@ -3,13 +3,17 @@ import java.net.*;
 import java.io.*;
 import signup.SelectRecords;
 import data.user;
+import signup.UpdateRecords;
+
 import java.util.List;
 import java.util.ArrayList;
 
 public class CommonServer {
     private SelectRecords sl;
+    private UpdateRecords up;
     public CommonServer() {
         sl = new SelectRecords();
+        up = new UpdateRecords();
     }
     public boolean checkLogin(String username, String password) {
         return sl.Checklogin(username, password);
@@ -21,7 +25,10 @@ public class CommonServer {
         return sl.selectFriend(username);
     }
     public void updateIPandPort(String username, String IP, int p) {
-        sl.updateIPandPort(username, IP, p);
+        up.updateIPandPort(username, IP, p);
+    }
+    public void setOnlineStatus(String username, boolean stat) {
+        up.updateStatus(username, stat);
     }
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         CommonServer serv = new CommonServer();
@@ -45,6 +52,11 @@ public class CommonServer {
             }
             else if (req.get(0).equals("updateipandport")) {
                 serv.updateIPandPort(req.get(1), req.get(2), Integer.parseInt(req.get(3)));
+                os.writeObject(null);
+            }
+            else if (req.get(0).equals("setonlinestatus")) {
+                serv.setOnlineStatus(req.get(1), Boolean.parseBoolean(req.get(2)));
+                os.writeObject(null);
             }
             sock.close();
         }
