@@ -131,7 +131,7 @@ public class MainWindow {
                 nef.setLayout(null);
                 nef.setVisible(true);
                 list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-                System.out.println("index="+list.getSelectedIndex());
+                //System.out.println("index="+list.getSelectedIndex());
                 list.setSelectedIndex(0);
                 //list.addListSelectionListener(this);
                 /*list.addListSelectionListener(new ListSelectionListener() {
@@ -143,7 +143,7 @@ public class MainWindow {
                         //fireStateChanged();
                     };
                 });*/
-                System.out.println("index="+list.getSelectedIndex());
+                //System.out.println("index="+list.getSelectedIndex());
                 JButton hireButton = new JButton("Add");
                 hireButton.setActionCommand("Add");
                 hireButton.addActionListener(new AddListener());
