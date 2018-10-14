@@ -9,7 +9,7 @@ import java.sql.*;
 public class SelectRecords {
     private Connection connect() {
         // SQLite connection string
-        String url = "jdbc:sqlite:D://MMT/Assignment1/Chat Application/Data.db";
+        String url =  "jdbc:sqlite:" + "Data.db";
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url);
