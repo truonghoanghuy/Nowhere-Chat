@@ -31,9 +31,26 @@ public class CreateTable {
             System.out.println(e.getMessage());
         }
     }
+    public static void createreqTable() {
+        // SQLite connection string
+        String url = "jdbc:sqlite:D://MMT/Assignment1/Chat Application/Data.db";
 
-//    public static void main(String[] args) {
-//        createNewTable();
-//    }
+        // SQL statement for creating a new table
+        String sql = "CREATE TABLE IF NOT EXISTS requests (\n"
+                + " req_name text NOT NULL,\n"
+                + " acc_name text NOT NULL,\n"
+                + ");";
+        try{
+            Connection conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement();
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+   public static void main(String[] args) {
+        createreqTable();
+    }
 }
 

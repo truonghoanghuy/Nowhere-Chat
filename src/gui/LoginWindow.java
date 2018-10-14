@@ -27,7 +27,7 @@ public class LoginWindow {
                     JOptionPane.showMessageDialog(null,"Please Enter Your User name and Password!");
                 else{
                     if(app.Checklogin(username.getText(),passwordtxt.getText()))
-                        showMainWindow();
+                        showMainWindow(username.getText());
                     else
                         JOptionPane.showMessageDialog(null,"Please Enter Again!");
 
@@ -53,9 +53,9 @@ public class LoginWindow {
         this_frame.dispose();
 
     }
-    private void showMainWindow() {
+    private void showMainWindow(String user_name) {
         JFrame frame = new JFrame("Nowhere Chat");
-        frame.setContentPane(new MainWindow(frame).getMainPanel());
+        frame.setContentPane(new MainWindow(frame,user_name).getMainPanel());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setSize(800,500);

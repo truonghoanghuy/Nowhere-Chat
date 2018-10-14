@@ -1,31 +1,21 @@
 package server;
 
-import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server_Socket {
-    private ServerSocket server;
-    private JTextArea chat_window;
-
     static class receive_message extends Thread {
-        private Socket socket;
-        private JTextArea chat_area;
-
-        public receive_message(Socket s, JTextArea ta) {
+        private Socket socket = null;
+        public receive_message(Socket s) {
             this.socket = s;
-            this.chat_area = ta;
         }
-
         public void run() {
             try {
                 BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 while (true) {
-                    String t = br.readLine();
-                    chat_area.append(t);
-                    System.out.println(t);
+                    System.out.println(br.readLine());
                 }
             }
             catch (Exception e) {
@@ -33,31 +23,16 @@ public class Server_Socket {
             }
         }
     }
-
-    public Server_Socket(JTextArea ta, int port) {
-        this.chat_window = ta;
-
+    public static void main(String[] args) {
         try {
-            System.out.println("waiting");
-            server = new ServerSocket(port);
-            acceptClient();
-        }
-        catch (Exception e) {
-
-        }
-    }
-
-    public void acceptClient() {
-        while (true) {
-            try {
-                System.out.println("waiting...");
+            ServerSocket server = new ServerSocket(2234);
+            while (true) {
                 Socket s = server.accept();
-                System.out.println("accepted");
-                new receive_message(s, chat_window).start();
+                new receive_message(s).start();
             }
-            catch (Exception e) {
+        }
+        catch(Exception e) {
 
-            }
         }
     }
 }
