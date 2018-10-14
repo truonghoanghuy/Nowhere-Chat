@@ -1,5 +1,6 @@
 package signup;
 
+import data.user;
 import gui.LoginWindow;
 import gui.MainWindow;
 
@@ -43,19 +44,16 @@ public class signup {
                         else
                             ins.insert(txtName.getText(), txtusername.getText(), txtemail.getText(), txtpassword.getText(), "Other", phone.getText(), "198.1.21.2", "2134", Boolean.TRUE);
                         JOptionPane.showMessageDialog(null, "Successful!");
+<<<<<<< HEAD
                         showMainWindow(txtusername.getText());
 
+=======
+                        showMainWindow(new SelectRecords().Checklogin(txtusername.getText(), txtpassword.getText()));
+>>>>>>> master
                     }
                 }
                 else
                     JOptionPane.showMessageDialog(null, "Your gender? :))");
-
-//                JFrame framen = new JFrame("Frame2");
-//                framen.setContentPane(new signup(framen).panelmain);
-//                framen.setSize(800,500);
-//                //frame.pack();
-//                framen.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-//                framen.setVisible(true);
             }
         });
         button1.addActionListener(new ActionListener() {
@@ -75,9 +73,15 @@ public class signup {
         return this.panelmain;
     }
 
+<<<<<<< HEAD
     private void showMainWindow(String usern) {
         JFrame frame = new JFrame("Nowhere Chat");
         frame.setContentPane(new MainWindow(frame,usern).getMainPanel());
+=======
+    private void showMainWindow(data.user usr) {
+        JFrame frame = new JFrame("Nowhere Chat");
+        frame.setContentPane(new MainWindow(frame, usr).getMainPanel());
+>>>>>>> master
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800,500);
         frame.setVisible(true);

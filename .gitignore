@@ -103,4 +103,8 @@ fabric.properties
 .idea/sonarlint
 
 
+<<<<<<< HEAD
 # End of https://www.gitignore.io/api/intellij
+=======
+# End of https://www.gitignore.io/api/intellij
+>>>>>>> master

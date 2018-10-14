@@ -35,4 +35,14 @@ public class Server_Socket {
 
         }
     }
+
+    public static void main(String[] args) {
+        try {
+            ServerSocket s = new ServerSocket(2134);
+            Socket socket = s.accept();
+        }
+        catch(Exception e) {
+
+        }
+    }
 }

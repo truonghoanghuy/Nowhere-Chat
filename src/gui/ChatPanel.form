@@ -16,14 +16,6 @@
         </constraints>
         <properties/>
       </component>
-      <component id="2b3d6" class="javax.swing.JButton" binding="button1" default-binding="true">
-        <constraints>
-          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Button"/>
-        </properties>
-      </component>
       <scrollpane id="d8415">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -31,7 +23,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="9f516" class="javax.swing.JTextArea" binding="textArea1" default-binding="true">
+          <component id="9f516" class="javax.swing.JTextArea" binding="textArea">
             <constraints/>
             <properties>
               <lineWrap value="false"/>
@@ -47,14 +39,21 @@
         <properties/>
         <border type="none"/>
         <children>
+<<<<<<< HEAD
           <component id="8b97d" class="javax.swing.JLabel" binding="friendNameLabel">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+=======
+          <component id="b27d8" class="javax.swing.JLabel" binding="friendNameLabel">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+>>>>>>> master
             </constraints>
             <properties>
               <text value="Label"/>
             </properties>
           </component>
+<<<<<<< HEAD
           <hspacer id="af035">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -75,8 +74,28 @@
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
             </constraints>
           </vspacer>
+=======
+          <hspacer id="29534">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </hspacer>
+          <hspacer id="adbee">
+            <constraints>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </hspacer>
+>>>>>>> master
         </children>
       </grid>
+      <component id="2b3d6" class="javax.swing.JButton" binding="sendButton" default-binding="true">
+        <constraints>
+          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Send"/>
+        </properties>
+      </component>
     </children>
   </grid>
 </form>
