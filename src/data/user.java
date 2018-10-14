@@ -1,10 +1,11 @@
 package data;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.InetAddress;
 import signup.SelectRecords;
 
-public class user {
+public class user implements Serializable {
     private int user_id;
     private String user_name;
     private String name;

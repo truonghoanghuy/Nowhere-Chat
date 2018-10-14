@@ -7,8 +7,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import signup.SelectRecords;
 import signup.signup;
+import client.CommonClient;
 
 public class LoginWindow {
+    //info
+    private CommonClient client;
+    //
     private JPanel panel;
     private JButton signUpButton;
     private JButton logInButton;
@@ -18,15 +22,14 @@ public class LoginWindow {
 
     public LoginWindow(JFrame f) {
         this.this_frame = f;
-
+        client = new CommonClient();
         logInButton.addMouseListener(new MouseAdapter() {
             //@Override
             public void mouseClicked(MouseEvent e) {
-                SelectRecords app = new SelectRecords();
                 if (username.getText().isEmpty() |passwordtxt.getText().isEmpty())
                     JOptionPane.showMessageDialog(null,"Please Enter Your User name and Password!");
                 else{
-                    if(app.Checklogin(username.getText(),passwordtxt.getText()))
+                    if(client.login(username.getText(),passwordtxt.getText()))
                         showMainWindow(username.getText());
                     else
                         JOptionPane.showMessageDialog(null,"Please Enter Again!");

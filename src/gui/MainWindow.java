@@ -9,10 +9,12 @@ import java.awt.event.MouseAdapter;
 import signup.SelectRecords;
 import data.*;
 import java.util.List;
+import client.CommonClient;
 
 public class MainWindow {
     //info
     private user owner;
+    private CommonClient client;
     //do not modify
     private JFrame this_frame;
     private JPanel mainPanel;
@@ -32,8 +34,7 @@ public class MainWindow {
     }
 
     public void friendship(String username) {
-        SelectRecords sl = new SelectRecords();
-        List<user> friends = sl.selectFriend(username);
+        List<user> friends = client.selectFriends(username);
         DefaultListModel<user> dml = new DefaultListModel<>();
         for (user frd : friends) {
             dml.addElement(frd);
@@ -43,8 +44,8 @@ public class MainWindow {
     }
 
     public MainWindow(JFrame f,String username) {
-        SelectRecords sl = new SelectRecords();
-        this.owner = sl.findUser(username);
+        client = new CommonClient();
+        this.owner = client.findUser(username);
         //this.owner.updateIPandPort(3001);
         this.this_frame = f;
         tabbedPane.setSelectedIndex(0);
