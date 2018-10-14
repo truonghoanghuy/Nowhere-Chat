@@ -6,56 +6,49 @@ import client.Client_Socket;
 import data.user;
 import server.Server_Socket;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ChatPanel {
     private ChatPanel this_chat_panel;
     private JPanel mainPanel;
-    private JButton button1;
+    private JButton sendButton;
     private JTextField messageTextField;
-    private JTextArea textArea1;
-    public JTextField textField2;
-    public JTextField textField3;
-    private JButton connectButton;
+    private JTextArea textArea;
     private JLabel friendNameLabel;
     private user user;
+    private BufferedReader br;
+    private PrintStream pr;
+    private Socket socket;
 
-    public Server_Socket server;
-    public Client_Socket client;
+    public ChatPanel(String name, Socket socket, user this_user) {
+        this.friendNameLabel.setText(name);
+        this.socket = socket;
+        this.user = this_user;
 
-    public boolean isServer = false;
-    public boolean isClient = false;
+        try {
+            this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.pr = new PrintStream(socket.getOutputStream());
+        }
+        catch (Exception e) {
 
-    public ChatPanel(String name) {
-        //this.friendNameLabel.setText(name);
+        }
 
-        connectButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SwingWorker worker = new SwingWorker() {
-                    @Override
-                    protected Void doInBackground() throws Exception {
-                        if (!textField2.getText().isEmpty()) {
-                            client = new Client_Socket(textField2.getText(), Integer.parseInt(textField3.getText()));
-                            isClient = true;
-                        }
-                        else {
-                            server = new Server_Socket(textArea1, Integer.parseInt(textField3.getText()));
-                            isServer = true;
-                        }
-                        return null;
-                    }
-                };
-                worker.execute();
-            }
-        });
-        button1.addActionListener(new ActionListener() {
+        receive_message receiving = new receive_message(br, textArea);
+        receiving.execute();
+
+        sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("I send this message!");
-                client.sendMessage(messageTextField.getText());
+                pr.println(user.getName() + ": " + messageTextField.getText());
+                textArea.append(user.getName() + ": " + messageTextField.getText()+ "\n");
+                messageTextField.setText("");
             }
         });
     }
@@ -63,5 +56,20 @@ public class ChatPanel {
         return this.mainPanel;
     }
 
+    static class receive_message extends SwingWorker {
+        private BufferedReader br;
+        JTextArea txta;
 
+        public receive_message(BufferedReader br, JTextArea txta) {
+            this.br = br;
+            this.txta = txta;
+        }
+        @Override
+        protected Void doInBackground() throws Exception {
+            while (true) {
+                String temp = br.readLine();
+                txta.append(temp + "\n");
+            }
+        }
+    }
 }

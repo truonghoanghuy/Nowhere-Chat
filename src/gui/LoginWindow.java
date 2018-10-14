@@ -23,14 +23,14 @@ public class LoginWindow {
             //@Override
             public void mouseClicked(MouseEvent e) {
                 SelectRecords app = new SelectRecords();
-                if (username.getText().isEmpty() |passwordtxt.getText().isEmpty())
+                if (username.getText().isEmpty() | passwordtxt.getText().isEmpty())
                     JOptionPane.showMessageDialog(null,"Please Enter Your User name and Password!");
                 else{
-                    if(app.Checklogin(username.getText(),passwordtxt.getText()))
-                        showMainWindow(username.getText());
+                    data.user new_user = app.Checklogin(username.getText(), passwordtxt.getText());
+                    if(new_user != null)
+                        showMainWindow(new_user);
                     else
                         JOptionPane.showMessageDialog(null,"Please Enter Again!");
-
                 }
                 //super.mouseClicked(e);
                 //Do something here to verify user and password before going to main window
@@ -53,11 +53,11 @@ public class LoginWindow {
         this_frame.dispose();
 
     }
-    private void showMainWindow(String user_name) {
+    private void showMainWindow(data.user user) {
         JFrame frame = new JFrame("Nowhere Chat");
-        frame.setContentPane(new MainWindow(frame,user_name).getMainPanel());
+        frame.setContentPane(new MainWindow(frame,user).getMainPanel());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setSize(800,500);
         frame.setVisible(true);
         this_frame.dispose();

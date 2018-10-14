@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server_Socket {
+public class server {
     private ServerSocket server;
     private JTextArea chat_window;
 
@@ -34,7 +34,7 @@ public class Server_Socket {
         }
     }
 
-    public Server_Socket(JTextArea ta, int port) {
+    public server(JTextArea ta, int port) {
         this.chat_window = ta;
 
         try {
