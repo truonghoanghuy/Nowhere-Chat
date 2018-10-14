@@ -35,7 +35,7 @@ public class FindRecords{
             if (!rs.isBeforeFirst() ) {
                 System.out.println("No data");
             }
-            System.out.println("ab");
+            //System.out.println("ab");
             //System.out.println(rs.getString("user_name"));
             /*while (rs.next()) {
                 System.out.println(rs.getInt("id") +  "\t" +
@@ -55,14 +55,14 @@ public class FindRecords{
                 //System.out.println("a");
                 System.out.println(rs.getString("user_name"));
             }
-            System.out.println("ac");
+            //System.out.println("ac");
             /*for (int i = 0; i < listModel.size(); i++) {
                 System.out.println(listModel.get(i));
             };*/
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            System.out.println("aa");
+            //System.out.println("aa");
         }
 
 
