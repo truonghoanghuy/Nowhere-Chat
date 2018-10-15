@@ -2,17 +2,13 @@ package gui;
 
 import javax.swing.*;
 
-import client.Client_Socket;
 import data.user;
-import server.Server_Socket;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ChatPanel {

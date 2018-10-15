@@ -1,8 +1,6 @@
-package data;
+package server;
 
-import java.io.Serializable;
-
-public class user implements Serializable {
+public class usr {
     private int user_id;
     private String user_name;
     private String name;
@@ -13,7 +11,7 @@ public class user implements Serializable {
     private int port;
     private Boolean status; // true is online, false is offline
 
-    public user(int user_id, String user_name, String name, String gender, String email, String phone_number, int port, boolean status) {
+    public usr(int user_id, String user_name, String name, String gender, String email, String phone_number, int port, boolean status) {
         this.user_id = user_id;
         this.user_name = user_name;
         this.name = name;

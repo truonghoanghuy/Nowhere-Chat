@@ -15,9 +15,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import client.Client_Socket;
+import client.CommonClient;
 import client.MainSocket;
 import data.*;
-import server.*;
 
 public class MainWindow {
     private JFrame this_frame;
@@ -38,58 +39,21 @@ public class MainWindow {
     private ArrayList<String> list_name_chat_conversations;
     private ArrayList<String> list_onine_friends;
     private ArrayList<Integer> list_port_online_friends;
-    private String url;
     private MainSocket main_socket;
-    // private JTable friend;
 
     public JPanel getMainPanel(){
         return this.mainPanel;
-    }
-    private Connection connect() {
-        // SQLite connection string
-        //String workingDir = System.getProperty("user.dir");
-        //String url = "jdbc:sqlite:" + workingDir + "/Data.db";
-        //String url = "jdbc:sqlite:$project_dir$/Data.db";
-
-        Connection conn = null;
-        try {
-            conn = DriverManager.getConnection(url);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return conn;
-    }
-    public void friendship(String namecheck1){
-        String sql = "SELECT user_name2 as 'User_name' FROM friendship  WHERE user_name1 = '"+ namecheck1+"'";
-
-        try {
-            Connection conn = this.connect();
-            Statement stmt  = conn.createStatement();
-            ResultSet rs    = stmt.executeQuery(sql);
-
-            DefaultListModel dml = new DefaultListModel();
-            while (rs.next()){
-                String uname = rs.getString("User_name");
-                dml.addElement(uname);
-            }
-            listfriend.setModel(dml);
-            //friend.setModel(DbUtils.resultSetToTableModel(rs));
-
-            // loop through the result set
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
     }
 
     public MainWindow(JFrame f,user cur_user) {
         this.this_frame = f;
         this.user = cur_user;
         this.nameText.setText(cur_user.getName());
-        this.url = "jdbc:sqlite:" + System.getProperty("user.dir") + "/Data.db";
         this.list_chat_conversations = new ArrayList<>();
         this.list_name_chat_conversations = new ArrayList<>();
         this.list_chat_sessions = new TreeMap<>();
+        CommonClient c = new CommonClient();
+        c.setOnlineStatus(cur_user.getUser_name(), true);
         try {
             this.main_socket = new MainSocket(cur_user, list_chat_sessions, list_chat_conversations, list_name_chat_conversations);
         }
@@ -110,7 +74,13 @@ public class MainWindow {
             }
         });
 
-        friendship(cur_user.getName());
+        this_frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                CommonClient c = new CommonClient();
+                c.setOnlineStatus(cur_user.getUser_name(), false);
+            }
+        });
 
         listfriend.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
@@ -151,6 +121,8 @@ public class MainWindow {
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setSize(800, 500);
                 frame.setVisible(true);
+                CommonClient c = new CommonClient();
+                c.setOnlineStatus(cur_user.getUser_name(), false);
                 this_frame.dispose();
             }
         });
@@ -174,25 +146,18 @@ public class MainWindow {
     void showOnlinePeople() {
         list_onine_friends = new ArrayList<>();
         list_port_online_friends = new ArrayList<>();
-        ((DefaultListModel) listfriend.getModel()).removeAllElements();
-        String sql = "SELECT user_name as 'User_name' , name as 'Name' , port as 'Port' FROM usersinfo  WHERE status = 1";
-        try {
-            Connection conn = this.connect();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                String uname = rs.getString("Name");
-                String usrname = rs.getString("User_name");
-                if (usrname.equals(user.getUser_name()))
-                    continue;
-                ((DefaultListModel) listfriend.getModel()).addElement(uname);
-                list_onine_friends.add(usrname);
-                list_port_online_friends.add(Integer.parseInt(rs.getString("Port")));
-            }
-            conn.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        DefaultListModel model = new DefaultListModel();
+        CommonClient ins = new CommonClient();
+        ArrayList<String> list = ins.getOnlinePeople(user.getUser_name());
+        for (String elem : list) {
+            user usr = ins.findUser(elem);
+            //if (usr.getUser_name().equals(user.getUser_name()))
+                //continue;
+            list_onine_friends.add(elem);
+            list_port_online_friends.add(usr.getPort());
+            model.addElement(usr.getName());
         }
+        listfriend.setModel(model);
     }
 
     void showRecentChat() {
@@ -204,23 +169,4 @@ public class MainWindow {
         listfriend.repaint();
         listfriend.revalidate();
     }
-
-//    static class waiting_request {
-//        private ServerSocket wait;
-//        private user usr;
-//
-//        public waiting_request(user u) {
-//            this.usr = u;
-//        }
-//        public void run() {
-//            while(true) {
-//                try {
-//                    wait = new ServerSocket(usr.getPort());
-//                }
-//                catch (Exception e) {
-//
-//                }
-//            }
-//        }
-//    }
 }

@@ -5,7 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import signup.SelectRecords;
+
+import client.CommonClient;
 import signup.signup;
 
 public class LoginWindow {
@@ -19,27 +20,25 @@ public class LoginWindow {
     public LoginWindow(JFrame f) {
         this.this_frame = f;
 
+        signUpButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                showSignupWindow();
+            }
+        });
+
         logInButton.addMouseListener(new MouseAdapter() {
-            //@Override
-            public void mouseClicked(MouseEvent e) {
-                SelectRecords app = new SelectRecords();
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
                 if (username.getText().isEmpty() | passwordtxt.getText().isEmpty())
                     JOptionPane.showMessageDialog(null,"Please Enter Your User name and Password!");
                 else{
-                    data.user new_user = app.Checklogin(username.getText(), passwordtxt.getText());
+                    data.user new_user = new CommonClient().login(username.getText(), passwordtxt.getText());
                     if(new_user != null)
                         showMainWindow(new_user);
                     else
                         JOptionPane.showMessageDialog(null,"Please Enter Again!");
                 }
-                //super.mouseClicked(e);
-                //Do something here to verify user and password before going to main window
-                //showMainWindow();
-            }
-        });
-        signUpButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                showSignupWindow();
             }
         });
     }

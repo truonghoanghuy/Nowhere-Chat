@@ -1,5 +1,7 @@
 package signup;
 
+import client.Client_Socket;
+import client.CommonClient;
 import data.user;
 import gui.LoginWindow;
 import gui.MainWindow;
@@ -27,16 +29,16 @@ public class signup {
 
     public signup(JFrame f) {
         this.this_frame = f;
+
         signUpButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                SelectRecords app = new SelectRecords();
+                CommonClient ins = new CommonClient();
                 if (txtusername.getText().isEmpty() | txtName.getText().isEmpty() | txtemail.getText().isEmpty() | txtpassword.getText().isEmpty()| phone.getText().isEmpty()  )
                     JOptionPane.showMessageDialog(null, "Please type full");
                 else if(maleRadioButton.isSelected() | femaleRadioButton.isSelected() | otherRadioButton.isSelected()) {
-                    if (!app.selectCheck(txtusername.getText()))
+                    if (ins.findUser(txtusername.getText()) != null)
                         JOptionPane.showMessageDialog(null, "Username is already exists and used, please type another one");
                     else {
-                        InsertRecords ins = new InsertRecords();
                         if (maleRadioButton.isSelected())
                             ins.insert(txtName.getText(), txtusername.getText(), txtemail.getText(), txtpassword.getText(), "Male", phone.getText(), "198.1.21.2", "2134", Boolean.TRUE);
                         else if (femaleRadioButton.isSelected())
@@ -44,13 +46,14 @@ public class signup {
                         else
                             ins.insert(txtName.getText(), txtusername.getText(), txtemail.getText(), txtpassword.getText(), "Other", phone.getText(), "198.1.21.2", "2134", Boolean.TRUE);
                         JOptionPane.showMessageDialog(null, "Successful!");
-                        showMainWindow(new SelectRecords().Checklogin(txtusername.getText(), txtpassword.getText()));
+                        showMainWindow(ins.login(txtusername.getText(), txtpassword.getText()));
                     }
                 }
                 else
                     JOptionPane.showMessageDialog(null, "Your gender? :))");
             }
         });
+
         button1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JFrame frame = new JFrame("HOME");
@@ -76,13 +79,4 @@ public class signup {
         frame.setVisible(true);
         this_frame.dispose();
     }
-//    public static void main(String[] args){
-//        JFrame frame = new JFrame("Registration");
-//        frame.setContentPane(new signup(frame).panelmain);
-//        frame.setSize(800,500);
-//        //frame.pack();
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setVisible(true);
-//
-//    }
 }
