@@ -8,6 +8,8 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -92,10 +94,13 @@ public class MainWindow {
                             int idx = listfriend.getSelectedIndex();
                             if (!list_chat_sessions.containsKey(list_onine_friends.get(idx))) {
                                 Socket s = new Socket("localhost", list_port_online_friends.get(idx));
-                                PrintStream out = new PrintStream(s.getOutputStream());
-                                out.println(cur_user.getUser_name());
-                                out.println(cur_user.getName());
-                                ChatPanel new_chat = new ChatPanel(listfriend.getSelectedValue().toString(), s,cur_user);
+                                ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
+                                ObjectInputStream in = new ObjectInputStream(s.getInputStream());
+                                ArrayList<String> req = new ArrayList<>(2);
+                                req.add(cur_user.getUser_name());
+                                req.add(cur_user.getName());
+                                out.writeObject(req);
+                                ChatPanel new_chat = new ChatPanel(listfriend.getSelectedValue().toString(), s, cur_user, out, in);
                                 list_chat_sessions.put(list_onine_friends.get(idx), new_chat);
                                 list_chat_conversations.add(list_onine_friends.get(idx));
                                 list_name_chat_conversations.add(listfriend.getSelectedValue().toString());
