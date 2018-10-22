@@ -14,6 +14,7 @@ public class server {
     private Connection conn;
     private SelectRecords sl;
     private UpdateRecords up;
+    private InsertRecords ins;
     public server() {
         String workingDir = System.getProperty("user.dir");
         String url = "jdbc:sqlite:" + workingDir + "/Data.db";
@@ -24,6 +25,7 @@ public class server {
         }
         sl = new SelectRecords(this.conn);
         up = new UpdateRecords(this.conn);
+        ins = new InsertRecords(this.conn);
     }
     public user checkLogin(String username, String password) {
         return sl.Checklogin(username, password);
@@ -42,6 +44,13 @@ public class server {
     }
     public ArrayList<String> getOnlinePeople(String usrname) {
         return sl.getOnlinePeople(usrname);
+    }
+    public void insert(String name, String user_name,String email,String password,String gender,
+                       String phonenumber,String ip_addr,String port,Boolean status) {
+        ins.insert(name, user_name, email, password, gender, phonenumber, ip_addr, port, status);
+    }
+    public void insertFriend(String username1, String username2) {
+        ins.insertfriend(username1, username2);
     }
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         server serv = new server();
@@ -77,7 +86,20 @@ public class server {
                 os.writeObject(people);
             }
             else if (req.get(0).equals("insert")) {
-
+                serv.insert(req.get(1),
+                        req.get(2),
+                        req.get(3),
+                        req.get(4),
+                        req.get(5),
+                        req.get(6),
+                        req.get(7),
+                        req.get(8),
+                        Boolean.parseBoolean(req.get(9)));
+                os.writeObject(null);
+            }
+            else if (req.get(0).equals("insertfriend")) {
+                serv.insertFriend(req.get(1), req.get(2));
+                os.writeObject(null);
             }
             sock.close();
         }
