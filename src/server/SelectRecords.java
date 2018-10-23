@@ -105,7 +105,8 @@ public class SelectRecords {
         return null;
     }
 
-    public void selectAll(){
+    public ArrayList<String> selectNotFriend(String usrname){
+        ArrayList<String> notfriend = new ArrayList<>();
         String sql = "SELECT * FROM usersinfo";
 
         try {
@@ -115,22 +116,17 @@ public class SelectRecords {
 
             // loop through the result set
             while (rs.next()) {
-                System.out.println(rs.getInt("id") +  "\t" +
-                        rs.getString("name") + "\t" +
-                        rs.getString("user_name") + "\t"+
-                        rs.getString("email") + "\t"+
-                        rs.getString("password") + "\t"+
-                        rs.getString("gender") + "\t"+
-                        rs.getString("phonenumber")+ "\t"+
-                        rs.getString("ip_addr") + "\t"+
-                        rs.getString("port")+ "\t"+
-                        rs.getBoolean("status"));
+                String u = rs.getString("user_name");
+                if (!u.equals(usrname) && !checkfriendship(usrname, u)) {
+                    notfriend.add(u);
+                }
             }
             stmt.close();
             rs.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        return notfriend;
     }
 
     public List<user> selectFriend(String username) {
@@ -202,5 +198,24 @@ public class SelectRecords {
             }
         }
         return res;
+    }
+    public boolean checkfriendship(String usrname1, String usrname2) {
+        String sql = "SELECT user_name1, user_name2 FROM friendship " +
+                "WHERE (user_name1 = '" + usrname1 +"' AND user_name2 = '" + usrname2 + "') " +
+                "OR (user_name1 = '" + usrname2 + "' AND user_name2 = '" + usrname1 +"')";
+        try {
+            Connection conn = this.connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                return true;
+            }
+            stmt.close();
+            rs.close();
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
     }
 }

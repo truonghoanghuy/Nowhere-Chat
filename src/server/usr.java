@@ -1,6 +1,8 @@
 package server;
 
-public class usr {
+import java.io.Serializable;
+
+public class usr implements Serializable {
     private int user_id;
     private String user_name;
     private String name;
