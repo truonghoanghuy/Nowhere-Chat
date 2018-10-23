@@ -52,6 +52,12 @@ public class server {
     public void insertFriend(String username1, String username2) {
         ins.insertfriend(username1, username2);
     }
+    public ArrayList<String> getNotFriend(String usrname) {
+        return sl.selectNotFriend(usrname);
+    }
+    public boolean checkFriendShip(String usrname1, String usrname2) {
+        return sl.checkfriendship(usrname1, usrname2);
+    }
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         server serv = new server();
         ServerSocket theServer = new ServerSocket(8000);
@@ -100,6 +106,14 @@ public class server {
             else if (req.get(0).equals("insertfriend")) {
                 serv.insertFriend(req.get(1), req.get(2));
                 os.writeObject(null);
+            }
+            else if (req.get(0).equals("getnotfriend")) {
+                ArrayList<String> people = serv.getNotFriend(req.get(1));
+                os.writeObject(people);
+            }
+            else if (req.get(0).equals("checkfriendship")) {
+                boolean ans = serv.checkFriendShip(req.get(1), req.get(2));
+                os.writeObject(ans);
             }
             sock.close();
         }
