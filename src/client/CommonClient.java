@@ -5,15 +5,23 @@ import java.util.ArrayList;
 import data.user;
 import java.util.List;
 
+import gui.RequestIPWindows;
+import gui.RequestIPWindows.*;
+
+import javax.swing.*;
+
 public class CommonClient {
     private Object requestServer(Object obj) {
         Object rs = null;
         try {
-            Socket sock = new Socket("localhost", 7000);
+            Socket sock = new Socket(RequestIPWindows.ip_server, 7000);
             ObjectOutputStream os = new ObjectOutputStream(sock.getOutputStream());
             ObjectInputStream is = new ObjectInputStream(sock.getInputStream());
             os.writeObject(obj);
             rs = is.readObject();
+        }
+        catch (UnknownHostException u) {
+            JOptionPane.showMessageDialog(null, "Can't find this Server! Are you sure the Server's IP is correct?");
         }
         catch (IOException e) {
             e.printStackTrace();

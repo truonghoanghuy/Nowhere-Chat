@@ -1,8 +1,6 @@
 package signup;
 
-import client.Client_Socket;
 import client.CommonClient;
-import data.user;
 import gui.LoginWindow;
 import gui.MainWindow;
 

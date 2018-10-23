@@ -68,7 +68,10 @@ public class server {
             ObjectInputStream is = new ObjectInputStream(sock.getInputStream());
             ArrayList<String> req = (ArrayList<String>) is.readObject();
             System.out.println("new client is accepted: " + req.get(0));
-            if (req.get(0).equals("login")) {
+            if (req.get(0).equals("Test connection")) {
+                //do nothing
+            }
+            else if (req.get(0).equals("login")) {
                 user canLogin = serv.checkLogin(req.get(1), req.get(2));
                 os.writeObject(canLogin);
             }
