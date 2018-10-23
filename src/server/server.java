@@ -45,7 +45,8 @@ public class server {
     }
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         server serv = new server();
-        ServerSocket theServer = new ServerSocket(8000);
+        System.out.println("This is IP of this server: " + Inet4Address.getLocalHost().getHostAddress());
+        ServerSocket theServer = new ServerSocket(7000);
         while (true) {
             Socket sock = theServer.accept();
             ObjectOutputStream os = new ObjectOutputStream(sock.getOutputStream());

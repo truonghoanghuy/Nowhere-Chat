@@ -9,7 +9,7 @@ public class CommonClient {
     private Object requestServer(Object obj) {
         Object rs = null;
         try {
-            Socket sock = new Socket("localhost", 8000);
+            Socket sock = new Socket("localhost", 7000);
             ObjectOutputStream os = new ObjectOutputStream(sock.getOutputStream());
             ObjectInputStream is = new ObjectInputStream(sock.getInputStream());
             os.writeObject(obj);
