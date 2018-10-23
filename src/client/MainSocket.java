@@ -1,10 +1,7 @@
 package client;
 
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -56,11 +53,13 @@ public class MainSocket extends SwingWorker {
 
         public void run() {
             try {
-                BufferedReader br = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                String client_usrname = br.readLine();
-                String client_name = br.readLine();
+                ObjectOutputStream pr = new ObjectOutputStream(client.getOutputStream());
+                ObjectInputStream br = new ObjectInputStream(client.getInputStream());
+                ArrayList<String> lst = (ArrayList<String>)br.readObject();
+                String client_usrname = lst.get(0);
+                String client_name = lst.get(1);
                 if (!list_chat_sessions.containsKey(client_usrname)) {
-                    list_chat_sessions.put(client_usrname, new ChatPanel(client_name, client, usr));
+                    list_chat_sessions.put(client_usrname, new ChatPanel(client_name, client, usr, pr, br));
                     list_chat_conversations.add(client_usrname);
                     list_name_chat_conversations.add(client_name);
                 }

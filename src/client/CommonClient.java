@@ -85,4 +85,17 @@ public class CommonClient {
         req.add(usrname);
         return (ArrayList<String>) this.requestServer(req);
     }
+    public ArrayList<String> getNotFriend(String usrname) {
+        ArrayList<String> req = new ArrayList<>(2);
+        req.add("getnotfriend");
+        req.add(usrname);
+        return (ArrayList<String>)this.requestServer(req);
+    }
+    public boolean checkFriendShip(String usrname1, String usrname2) {
+        ArrayList<String> req = new ArrayList<>(3);
+        req.add("checkfriendship");
+        req.add(usrname1);
+        req.add(usrname2);
+        return (boolean) this.requestServer(req);
+    }
 }

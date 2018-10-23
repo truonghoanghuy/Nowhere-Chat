@@ -5,14 +5,15 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
+import java.awt.event.*;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 
 import client.Client_Socket;
@@ -33,12 +34,16 @@ public class MainWindow {
     private JList listfriend;
     private JButton hometxt;
     private JLabel nameText;
+    private JList listpeople;
+    private JList friends;
     private user user;
     private TreeMap<String, ChatPanel> list_chat_sessions;
     private ArrayList<String> list_chat_conversations;
     private ArrayList<String> list_name_chat_conversations;
     private ArrayList<String> list_onine_friends;
     private ArrayList<Integer> list_port_online_friends;
+    private ArrayList<String> list_not_friend;
+    private List<user> friendslist;
     private MainSocket main_socket;
 
     public JPanel getMainPanel(){
@@ -52,6 +57,7 @@ public class MainWindow {
         this.list_chat_conversations = new ArrayList<>();
         this.list_name_chat_conversations = new ArrayList<>();
         this.list_chat_sessions = new TreeMap<>();
+        this.list_not_friend = new ArrayList<>();
         CommonClient c = new CommonClient();
         c.setOnlineStatus(cur_user.getUser_name(), true);
         try {
@@ -63,54 +69,12 @@ public class MainWindow {
         main_socket.execute();
         tabbedPane.setSelectedIndex(-1);
 
-        recent_chat.addListSelectionListener(new ListSelectionListener() {
-            //@Override
-            public void valueChanged(ListSelectionEvent e) {
-                ChatPanel chat = list_chat_sessions.get(list_chat_conversations.get(recent_chat.getSelectedIndex()));
-                contentPanel.removeAll();
-                contentPanel.add(chat.getMainPanel());
-                contentPanel.repaint();
-                contentPanel.revalidate();
-            }
-        });
 
         this_frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
                 CommonClient c = new CommonClient();
                 c.setOnlineStatus(cur_user.getUser_name(), false);
-            }
-        });
-
-        listfriend.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                contentPanel.removeAll();
-                SwingWorker worker = new SwingWorker() {
-                    @Override
-                    protected Void doInBackground() throws Exception {
-                        try {
-                            int idx = listfriend.getSelectedIndex();
-                            if (!list_chat_sessions.containsKey(list_onine_friends.get(idx))) {
-                                Socket s = new Socket("localhost", list_port_online_friends.get(idx));
-                                PrintStream out = new PrintStream(s.getOutputStream());
-                                out.println(cur_user.getUser_name());
-                                out.println(cur_user.getName());
-                                ChatPanel new_chat = new ChatPanel(listfriend.getSelectedValue().toString(), s,cur_user);
-                                list_chat_sessions.put(list_onine_friends.get(idx), new_chat);
-                                list_chat_conversations.add(list_onine_friends.get(idx));
-                                list_name_chat_conversations.add(listfriend.getSelectedValue().toString());
-                            }
-                            contentPanel.add(list_chat_sessions.get(list_onine_friends.get(idx)).getMainPanel());
-                            contentPanel.repaint();
-                            contentPanel.revalidate();
-                        }
-                        catch (Exception exc)  {
-
-                        }
-                        return null;
-                    }
-                };
-                worker.execute();
             }
         });
 
@@ -132,13 +96,80 @@ public class MainWindow {
             public void stateChanged(ChangeEvent e) {
                 if (tabbedPane.getSelectedIndex() == 0) {
                     showRecentChat();
+                    listfriend.removeAll();
+                    listpeople.removeAll();
                 }
                 else if (tabbedPane.getSelectedIndex() == 1) {
                     showOnlinePeople();
+                    listpeople.removeAll();
+                    recent_chat.removeAll();
                 }
                 else if(tabbedPane.getSelectedIndex() == 2) {
-
+                    showNotFriend();
                 }
+                else if(tabbedPane.getSelectedIndex() == 3) {
+                    showFriends();
+                }
+            }
+        });
+        listpeople.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                int input = JOptionPane.showConfirmDialog(null,
+                        "Do you want to add " + list_not_friend.get(listpeople.getSelectedIndex()) + " ?",
+                        "Select an option...", JOptionPane.YES_NO_OPTION);
+                if (input == 0) {
+                    //yes
+                    CommonClient add = new CommonClient();
+                    user frd = add.findUser(list_not_friend.get(listpeople.getSelectedIndex()));
+                    add.insertfriend(user.getUser_name(), frd.getUser_name());
+                    JOptionPane.showMessageDialog(null,"Add friend successfully!");
+                }
+            }
+        });
+        recent_chat.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                ChatPanel chat = list_chat_sessions.get(list_chat_conversations.get(recent_chat.getSelectedIndex()));
+                contentPanel.removeAll();
+                contentPanel.add(chat.getMainPanel());
+                contentPanel.repaint();
+                contentPanel.revalidate();
+            }
+        });
+        listfriend.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                contentPanel.removeAll();
+                SwingWorker worker = new SwingWorker() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        try {
+                            int idx = listfriend.getSelectedIndex();
+                            if (!list_chat_sessions.containsKey(list_onine_friends.get(idx))) {
+                                Socket s = new Socket("localhost", list_port_online_friends.get(idx));
+                                ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
+                                ObjectInputStream in = new ObjectInputStream(s.getInputStream());
+                                ArrayList<String> req = new ArrayList<>(2);
+                                req.add(cur_user.getUser_name());
+                                req.add(cur_user.getName());
+                                out.writeObject(req);
+                                ChatPanel new_chat = new ChatPanel(listfriend.getSelectedValue().toString(), s, cur_user, out, in);
+                                list_chat_sessions.put(list_onine_friends.get(idx), new_chat);
+                                list_chat_conversations.add(list_onine_friends.get(idx));
+                                list_name_chat_conversations.add(listfriend.getSelectedValue().toString());
+                            }
+                            contentPanel.add(list_chat_sessions.get(list_onine_friends.get(idx)).getMainPanel());
+                            contentPanel.repaint();
+                            contentPanel.revalidate();
+                        }
+                        catch (Exception exc)  {
+
+                        }
+                        return null;
+                    }
+                };
+                worker.execute();
             }
         });
     }
@@ -166,7 +197,33 @@ public class MainWindow {
             dml.addElement(name);
         }
         recent_chat.setModel(dml);
-        listfriend.repaint();
-        listfriend.revalidate();
+//        listfriend.repaint();
+//        listfriend.revalidate();
+    }
+
+    void showNotFriend() {
+        list_not_friend = new ArrayList<>();
+        DefaultListModel dml = new DefaultListModel();
+        CommonClient sl = new CommonClient();
+        ArrayList<String> list = sl.getNotFriend(user.getUser_name());
+        for (String elem : list) {
+            list_not_friend.add(elem);
+            user u = sl.findUser(elem);
+            dml.addElement(elem + ": " + u.getName());
+        }
+        listpeople.setModel(dml);
+        listpeople.repaint();
+        listpeople.revalidate();
+    }
+
+    void showFriends() {
+        friendslist = new ArrayList<>();
+        DefaultListModel dml = new DefaultListModel();
+        CommonClient sl = new CommonClient();
+        friendslist = sl.selectFriends(user.getUser_name());
+        for (user elem : friendslist) {
+            dml.addElement(elem.getName());
+        }
+        friends.setModel(dml);
     }
 }
