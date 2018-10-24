@@ -6,6 +6,8 @@ import data.user;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.*;
 import java.net.Socket;
 import javax.swing.JFileChooser;
@@ -38,18 +40,10 @@ public class ChatPanel {
         sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //pr.println(user.getName() + ": " + messageTextField.getText());
-                try {
-                    dataSocket obj = new dataSocket(user.getName() + ": " + messageTextField.getText());
-                    pr.writeObject(obj);
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-                textArea.append(user.getName() + ": " + messageTextField.getText()+ "\n");
-                messageTextField.setText("");
+                send();
             }
         });
+
         chooseFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -57,16 +51,39 @@ public class ChatPanel {
                 try {
                     dataSocket obj = new dataSocket(f, user.getName());
                     pr.writeObject(obj);
-                }
-                catch (IOException ex) {
+                } catch (IOException ex) {
                     ex.printStackTrace();
                 }
                 textArea.append(user.getName() + ": " + "Sending file " + f.getName() + " ..." + "\n");
             }
         });
+
+        messageTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    send();
+                }
+            }
+        });
     }
+
     public JPanel getMainPanel() {
         return this.mainPanel;
+    }
+
+    void send() {
+        try {
+            dataSocket obj = new dataSocket(user.getName() + ": " + messageTextField.getText());
+            pr.writeObject(obj);
+        }
+        catch (IOException ex) {
+            JOptionPane.showMessageDialog(mainPanel, "Oops, this user is no longer online. So you can't send message to this user");
+            messageTextField.setText("");
+            return;
+        }
+        textArea.append(user.getName() + ": " + messageTextField.getText()+ "\n");
+        messageTextField.setText("");
     }
 
     static class receive_message extends SwingWorker {

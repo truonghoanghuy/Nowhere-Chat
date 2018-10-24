@@ -6,6 +6,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.event.*;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,15 +55,23 @@ public class MainWindow {
         this.list_not_friend = new ArrayList<>();
         CommonClient c = new CommonClient();
         c.setOnlineStatus(cur_user.getUser_name(), true);
+
         try {
             this.main_socket = new MainSocket(cur_user, list_chat_sessions, list_chat_conversations, list_name_chat_conversations);
         }
         catch (Exception e) {
-
+            JOptionPane.showMessageDialog(this_frame, e.getMessage());
         }
+
+        try {
+            c.updateIPAndPort(user.getUser_name(), InetAddress.getLocalHost().getHostAddress(), this.main_socket.getPort());
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this_frame, e.getMessage());
+        }
+
         main_socket.execute();
         tabbedPane.setSelectedIndex(-1);
-
 
         this_frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override

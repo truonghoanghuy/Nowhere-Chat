@@ -16,6 +16,7 @@ public class MainSocket extends SwingWorker {
     private TreeMap<String, ChatPanel> list_chat_sessions;
     private ArrayList<String> list_chat_conversations;
     private ArrayList<String> list_name_chat_conversations;
+    private int this_port;
 
     public MainSocket(user usr, TreeMap<String, ChatPanel> list_chat_sessions, ArrayList<String> list_chat_conversations, ArrayList<String> list_name_chat_conversations) throws Exception {
         this.usr = usr;
@@ -23,7 +24,12 @@ public class MainSocket extends SwingWorker {
         this.list_chat_sessions = list_chat_sessions;
         this.list_chat_conversations = list_chat_conversations;
         this.list_name_chat_conversations = list_name_chat_conversations;
-        this.server = new ServerSocket(port);
+        this.server = new ServerSocket(0);
+        this_port = this.server.getLocalPort();
+    }
+
+    public int getPort() {
+        return this_port;
     }
 
     @Override

@@ -2,13 +2,13 @@ package server;
 import java.lang.reflect.Array;
 import java.net.*;
 import java.io.*;
-import data.user;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
+
+import data.user;
 
 public class server {
     private Connection conn;
@@ -83,7 +83,7 @@ public class server {
                 List<user> frds = serv.selectFriends(req.get(1));
                 os.writeObject(frds);
             }
-            else if (req.get(0).equals("updateipandport")) {
+            else if (req.get(0).equals("updateIpAndPort")) {
                 serv.updateIPandPort(req.get(1), req.get(2), Integer.parseInt(req.get(3)));
                 os.writeObject(null);
             }

@@ -38,11 +38,11 @@ public class signup {
                         JOptionPane.showMessageDialog(null, "Username is already exists and used, please type another one");
                     else {
                         if (maleRadioButton.isSelected())
-                            ins.insert(txtName.getText(), txtusername.getText(), txtemail.getText(), txtpassword.getText(), "Male", phone.getText(), "198.1.21.2", "2134", Boolean.TRUE);
+                            ins.insert(txtName.getText(), txtusername.getText(), txtemail.getText(), txtpassword.getText(), "Male", phone.getText(), "", "1234", Boolean.TRUE);
                         else if (femaleRadioButton.isSelected())
-                            ins.insert(txtName.getText(), txtusername.getText(), txtemail.getText(), txtpassword.getText(), "Female", phone.getText(), "198.1.21.2", "2134", Boolean.TRUE);
+                            ins.insert(txtName.getText(), txtusername.getText(), txtemail.getText(), txtpassword.getText(), "Female", phone.getText(), "", "1234", Boolean.TRUE);
                         else
-                            ins.insert(txtName.getText(), txtusername.getText(), txtemail.getText(), txtpassword.getText(), "Other", phone.getText(), "198.1.21.2", "2134", Boolean.TRUE);
+                            ins.insert(txtName.getText(), txtusername.getText(), txtemail.getText(), txtpassword.getText(), "Other", phone.getText(), "", "1234", Boolean.TRUE);
                         JOptionPane.showMessageDialog(null, "Successful!");
                         showMainWindow(ins.login(txtusername.getText(), txtpassword.getText()));
                     }

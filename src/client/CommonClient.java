@@ -19,6 +19,7 @@ public class CommonClient {
             ObjectInputStream is = new ObjectInputStream(sock.getInputStream());
             os.writeObject(obj);
             rs = is.readObject();
+            sock.close();
         }
         catch (UnknownHostException u) {
             JOptionPane.showMessageDialog(null, "Can't find this Server! Are you sure the Server's IP is correct?");
@@ -57,9 +58,9 @@ public class CommonClient {
         req.add(String.valueOf(stat));
         this.requestServer(req);
     }
-    public void updateIPandPort(String username, String IP, int port) {
+    public void updateIPAndPort(String username, String IP, int port) {
         ArrayList<String> req = new ArrayList<>(4);
-        req.add("updateipandport");
+        req.add("updateIpAndPort");
         req.add(username);
         req.add(IP);
         req.add(Integer.toString(port));

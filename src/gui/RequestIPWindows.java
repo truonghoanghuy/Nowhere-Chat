@@ -37,6 +37,7 @@ public class RequestIPWindows {
                         ArrayList<String> arr = new ArrayList<>();
                         arr.add("Test connection");
                         os.writeObject(arr);
+                        sock.close();
                     }
                     catch (UnknownHostException u) {
                         JOptionPane.showMessageDialog(this_frame, "Can't find this Server! Are you sure the Server's IP is correct?");
