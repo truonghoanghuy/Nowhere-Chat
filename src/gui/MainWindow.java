@@ -152,7 +152,7 @@ public class MainWindow {
                             if (!list_chat_sessions.containsKey(list_onine_friends.get(idx))) {
                                 CommonClient cl = new CommonClient();
                                 user usr = cl.findUser(list_onine_friends.get(idx));
-                                Socket s = new Socket(usr.getIp_address(), list_port_online_friends.get(idx));
+                                Socket s = new Socket(usr.getIp_address(), usr.getPort());
                                 ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
                                 ObjectInputStream in = new ObjectInputStream(s.getInputStream());
                                 ArrayList<String> req = new ArrayList<>(2);

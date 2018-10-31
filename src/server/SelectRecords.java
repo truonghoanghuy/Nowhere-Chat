@@ -36,6 +36,7 @@ public class SelectRecords {
                         rs.getString("gender"),
                         rs.getString("email"),
                         rs.getString("phonenumber"),
+                        rs.getString("ip_addr"),
                         rs.getInt("port"),
                         rs.getBoolean("status"));
             }
@@ -94,6 +95,7 @@ public class SelectRecords {
                                                 rs.getString("gender"),
                                                 rs.getString("email"),
                                                 rs.getString("phonenumber"),
+                                                rs.getString("ip_addr"),
                                                 Integer.parseInt(rs.getString("port")),
                                                 rs.getBoolean("status"));
             }

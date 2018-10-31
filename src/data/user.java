@@ -13,13 +13,14 @@ public class user implements Serializable {
     private int port;
     private Boolean status; // true is online, false is offline
 
-    public user(int user_id, String user_name, String name, String gender, String email, String phone_number, int port, boolean status) {
+    public user(int user_id, String user_name, String name, String gender, String email, String phone_number, String ip, int port, boolean status) {
         this.user_id = user_id;
         this.user_name = user_name;
         this.name = name;
         this.gender = gender;
         this.email = email;
         this.phone_number = phone_number;
+        this.ip_address = ip;
         this.port = port;
         this.status = status;
     }

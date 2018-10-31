@@ -25,11 +25,10 @@ public class MainSocket extends SwingWorker {
         this.list_chat_conversations = list_chat_conversations;
         this.list_name_chat_conversations = list_name_chat_conversations;
         this.server = new ServerSocket(0);
-        this_port = this.server.getLocalPort();
     }
 
     public int getPort() {
-        return this_port;
+        return this.server.getLocalPort();
     }
 
     @Override
@@ -37,7 +36,6 @@ public class MainSocket extends SwingWorker {
         while (true) {
             Socket client = server.accept();
             new chat_sessions(usr, client, list_chat_sessions, list_chat_conversations, list_name_chat_conversations).start();
-            //update port
         }
     }
 
