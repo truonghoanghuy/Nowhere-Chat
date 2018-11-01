@@ -21,18 +21,20 @@ public class ChatPanel {
     private JLabel friendNameLabel;
     private JButton chooseFileButton;
     private user user;
+    private user friend;
     //private BufferedReader br;
     //private PrintStream pr;
     private ObjectInputStream br;
     private ObjectOutputStream pr;
     private Socket socket;
 
-    public ChatPanel(String name, Socket socket, user this_user, ObjectOutputStream out, ObjectInputStream in) {
+    public ChatPanel(String name, Socket socket, user this_user, user friend, ObjectOutputStream out, ObjectInputStream in) {
         this.friendNameLabel.setText(name);
         this.socket = socket;
         this.user = this_user;
         this.pr = out;
         this.br = in;
+        this.friend = friend;
 
         receive_message receiving = new receive_message(br, pr, textArea);
         receiving.execute();
@@ -72,6 +74,10 @@ public class ChatPanel {
         return this.mainPanel;
     }
 
+    public Socket getSocket(){
+        return this.socket;
+    }
+
     private void send() {
         try {
             dataSocket obj = new dataSocket(user.getName() + ": " + messageTextField.getText());
@@ -80,6 +86,8 @@ public class ChatPanel {
         catch (IOException ex) {
             JOptionPane.showMessageDialog(mainPanel, "Oops, this user is no longer online. So you can't send message to this user");
             messageTextField.setText("");
+            if (MainWindow.list_chat_sessions.containsKey(friend))
+                MainWindow.list_chat_sessions.remove(friend);
             return;
         }
         textArea.append(user.getName() + ": " + messageTextField.getText()+ "\n");

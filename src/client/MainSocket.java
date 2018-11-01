@@ -26,6 +26,11 @@ public class MainSocket extends SwingWorker {
         return this.server.getLocalPort();
     }
 
+    public void closeMainSocket() throws IOException{
+        if (!this.server.isClosed())
+            this.server.close();
+    }
+
     @Override
     protected Void doInBackground() throws Exception {
         while (true) {
@@ -54,7 +59,7 @@ public class MainSocket extends SwingWorker {
                 ObjectInputStream br = new ObjectInputStream(client.getInputStream());
                 user u = (user) br.readObject();
                 if (!list_chat_sessions.containsKey(u.getUser_name())) {
-                    list_chat_sessions.put(u.getUser_name(), new ChatPanel(u.getName(), client, usr, pr, br));
+                    list_chat_sessions.put(u.getUser_name(), new ChatPanel(u.getName(), client, usr, u, pr, br));
                     list_recent_chats.add(u);
                 }
             }

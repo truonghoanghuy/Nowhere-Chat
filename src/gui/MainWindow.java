@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.*;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.DatagramSocket;
@@ -34,7 +35,7 @@ public class MainWindow {
     private JList listpeople;
     private JList friends;
     private user user;
-    private TreeMap<String, ChatPanel> list_chat_sessions;
+    public static TreeMap<String, ChatPanel> list_chat_sessions;
     private ArrayList<user> list_recent_chats;
     private ArrayList<user> list_onine_friends;
     private ArrayList<String> list_not_friend;
@@ -58,26 +59,26 @@ public class MainWindow {
         this.c = new CommonClient();
         c.setOnlineStatus(cur_user.getUser_name(), true);
 
-        w = new SwingWorker() {
-            @Override
-            protected Object doInBackground() throws Exception {
-                abc: while(true) {
-                    for (Map.Entry<String, ChatPanel> entry : list_chat_sessions.entrySet()) {
-                        user usr = c.findUser(entry.getKey());
-                        if (!usr.getStatus()) {
-                            list_chat_sessions.remove(entry.getKey());
-                            for (user ur : list_recent_chats) {
-                                if (ur.getUser_name().equals(usr.getUser_name())) {
-                                    list_recent_chats.remove(ur);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        };
-        w.execute();
+//        w = new SwingWorker() {
+//            @Override
+//            protected Object doInBackground() throws Exception {
+//                abc: while(true) {
+//                    for (Map.Entry<String, ChatPanel> entry : list_chat_sessions.entrySet()) {
+//                        user usr = c.findUser(entry.getKey());
+//                        if (!usr.getStatus()) {
+//                            list_chat_sessions.remove(entry.getKey());
+//                            for (user ur : list_recent_chats) {
+//                                if (ur.getUser_name().equals(usr.getUser_name())) {
+//                                    list_recent_chats.remove(ur);
+//                                    break;
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        };
+//        w.execute();
         try {
             this.main_socket = new MainSocket(cur_user, list_chat_sessions, list_recent_chats);
         } catch (Exception e) {
@@ -179,7 +180,7 @@ public class MainWindow {
                                 ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
                                 ObjectInputStream in = new ObjectInputStream(s.getInputStream());
                                 out.writeObject(user);
-                                ChatPanel new_chat = new ChatPanel(listfriend.getSelectedValue().toString(), s, cur_user, out, in);
+                                ChatPanel new_chat = new ChatPanel(listfriend.getSelectedValue().toString(), s, cur_user, usr, out, in);
                                 list_chat_sessions.put(list_onine_friends.get(idx).getUser_name(), new_chat);
                                 list_recent_chats.add(list_onine_friends.get(idx));
                             }
@@ -244,6 +245,15 @@ public class MainWindow {
 
     void close() {
         c.closeConnection();
-        w.cancel(true);
+        //w.cancel(true);
+        try {
+            for (Map.Entry<String, ChatPanel> entry : list_chat_sessions.entrySet()) {
+                entry.getValue().getSocket().close();
+            }
+            main_socket.closeMainSocket();
+        }
+        catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
