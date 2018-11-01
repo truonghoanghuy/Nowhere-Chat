@@ -38,6 +38,7 @@ public class MainWindow {
     private ArrayList<String> list_not_friend;
     private List<user> friendslist;
     private MainSocket main_socket;
+    private CommonClient c;
 
     public JPanel getMainPanel(){
         return this.mainPanel;
@@ -50,20 +51,18 @@ public class MainWindow {
         this.list_recent_chats = new ArrayList<>();
         this.list_chat_sessions = new TreeMap<>();
         this.list_not_friend = new ArrayList<>();
-        CommonClient c = new CommonClient();
+        this.c = RequestIPWindows.common_client;
         c.setOnlineStatus(cur_user.getUser_name(), true);
 
         try {
             this.main_socket = new MainSocket(cur_user, list_chat_sessions, list_recent_chats);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this_frame, e.getMessage());
         }
 
         try {
             c.updateIPAndPort(user.getUser_name(), InetAddress.getLocalHost().getHostAddress(), this.main_socket.getPort());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this_frame, e.getMessage());
         }
 
@@ -73,7 +72,6 @@ public class MainWindow {
         this_frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                CommonClient c = new CommonClient();
                 c.setOnlineStatus(cur_user.getUser_name(), false);
             }
         });
@@ -85,7 +83,6 @@ public class MainWindow {
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setSize(800, 500);
                 frame.setVisible(true);
-                CommonClient c = new CommonClient();
                 c.setOnlineStatus(cur_user.getUser_name(), false);
                 this_frame.dispose();
             }
@@ -98,16 +95,13 @@ public class MainWindow {
                     showRecentChat();
                     listfriend.removeAll();
                     listpeople.removeAll();
-                }
-                else if (tabbedPane.getSelectedIndex() == 1) {
+                } else if (tabbedPane.getSelectedIndex() == 1) {
                     showOnlinePeople();
                     listpeople.removeAll();
                     recent_chat.removeAll();
-                }
-                else if(tabbedPane.getSelectedIndex() == 2) {
+                } else if (tabbedPane.getSelectedIndex() == 2) {
                     showNotFriend();
-                }
-                else if(tabbedPane.getSelectedIndex() == 3) {
+                } else if (tabbedPane.getSelectedIndex() == 3) {
                     showFriends();
                 }
             }
@@ -121,10 +115,9 @@ public class MainWindow {
                         "Select an option...", JOptionPane.YES_NO_OPTION);
                 if (input == 0) {
                     //yes
-                    CommonClient add = new CommonClient();
-                    user frd = add.findUser(list_not_friend.get(listpeople.getSelectedIndex()));
-                    add.insertfriend(user.getUser_name(), frd.getUser_name());
-                    JOptionPane.showMessageDialog(null,"Add friend successfully!");
+                    user frd = c.findUser(list_not_friend.get(listpeople.getSelectedIndex()));
+                    c.insertfriend(user.getUser_name(), frd.getUser_name());
+                    JOptionPane.showMessageDialog(null, "Add friend successfully!");
                 }
             }
         });
@@ -143,33 +136,24 @@ public class MainWindow {
             @Override
             public void mouseReleased(MouseEvent e) {
                 contentPanel.removeAll();
-                SwingWorker worker = new SwingWorker() {
-                    @Override
-                    protected Void doInBackground() throws Exception {
-                        try {
-                            int idx = listfriend.getSelectedIndex();
-                            if (!list_chat_sessions.containsKey(list_onine_friends.get(idx).getUser_name())) {
-                                CommonClient cl = new CommonClient();
-                                user usr = cl.findUser(list_onine_friends.get(idx).getUser_name());
-                                Socket s = new Socket(usr.getIp_address(), usr.getPort());
-                                ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
-                                ObjectInputStream in = new ObjectInputStream(s.getInputStream());
-                                out.writeObject(user);
-                                ChatPanel new_chat = new ChatPanel(listfriend.getSelectedValue().toString(), s, cur_user, out, in);
-                                list_chat_sessions.put(list_onine_friends.get(idx).getUser_name(), new_chat);
-                                list_recent_chats.add(list_onine_friends.get(idx));
-                            }
-                            contentPanel.add(list_chat_sessions.get(list_onine_friends.get(idx).getUser_name()).getMainPanel());
-                            contentPanel.repaint();
-                            contentPanel.revalidate();
-                        }
-                        catch (Exception exc)  {
-
-                        }
-                        return null;
+                try {
+                    int idx = listfriend.getSelectedIndex();
+                    if (!list_chat_sessions.containsKey(list_onine_friends.get(idx).getUser_name())) {
+                        user usr = c.findUser(list_onine_friends.get(idx).getUser_name());
+                        Socket s = new Socket(usr.getIp_address(), usr.getPort());
+                        ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
+                        ObjectInputStream in = new ObjectInputStream(s.getInputStream());
+                        out.writeObject(user);
+                        ChatPanel new_chat = new ChatPanel(listfriend.getSelectedValue().toString(), s, cur_user, out, in);
+                        list_chat_sessions.put(list_onine_friends.get(idx).getUser_name(), new_chat);
+                        list_recent_chats.add(list_onine_friends.get(idx));
                     }
-                };
-                worker.execute();
+                    contentPanel.add(list_chat_sessions.get(list_onine_friends.get(idx).getUser_name()).getMainPanel());
+                    contentPanel.repaint();
+                    contentPanel.revalidate();
+                } catch (Exception exc) {
+                    JOptionPane.showMessageDialog(this_frame, exc.getMessage());
+                }
             }
         });
     }
@@ -177,8 +161,7 @@ public class MainWindow {
     private void showOnlinePeople() {
         list_onine_friends = new ArrayList<>();
         DefaultListModel model = new DefaultListModel();
-        CommonClient ins = new CommonClient();
-        ArrayList<user> list = ins.getOnlinePeople(user.getUser_name());
+        ArrayList<user> list = c.getOnlinePeople(user.getUser_name());
         for (user elem : list) {
             list_onine_friends.add(elem);
             model.addElement(elem.getName());
@@ -187,7 +170,7 @@ public class MainWindow {
         listfriend.setModel(model);
     }
 
-    void showRecentChat() {
+    private void showRecentChat() {
         recent_chat.removeAll();
         DefaultListModel dml = new DefaultListModel();
         for (user u : list_recent_chats) {
@@ -196,14 +179,13 @@ public class MainWindow {
         recent_chat.setModel(dml);
     }
 
-    void showNotFriend() {
+    private void showNotFriend() {
         list_not_friend = new ArrayList<>();
         DefaultListModel dml = new DefaultListModel();
-        CommonClient sl = new CommonClient();
-        ArrayList<String> list = sl.getNotFriend(user.getUser_name());
+        ArrayList<String> list = c.getNotFriend(user.getUser_name());
         for (String elem : list) {
             list_not_friend.add(elem);
-            user u = sl.findUser(elem);
+            user u = c.findUser(elem);
             dml.addElement(elem + ": " + u.getName());
         }
         listpeople.setModel(dml);
@@ -211,11 +193,10 @@ public class MainWindow {
         listpeople.revalidate();
     }
 
-    void showFriends() {
+    private void showFriends() {
         friendslist = new ArrayList<>();
         DefaultListModel dml = new DefaultListModel();
-        CommonClient sl = new CommonClient();
-        friendslist = sl.selectFriends(user.getUser_name());
+        friendslist = c.selectFriends(user.getUser_name());
         for (user elem : friendslist) {
             dml.addElement(elem.getName());
         }

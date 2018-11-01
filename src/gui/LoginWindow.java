@@ -33,7 +33,7 @@ public class LoginWindow {
                 if (username.getText().isEmpty() | passwordtxt.getText().isEmpty())
                     JOptionPane.showMessageDialog(null,"Please Enter Your User name and Password!");
                 else{
-                    data.user new_user = new CommonClient().login(username.getText(), passwordtxt.getText());
+                    data.user new_user = RequestIPWindows.common_client.login(username.getText(), passwordtxt.getText());
                     if(new_user != null)
                         showMainWindow(new_user);
                     else

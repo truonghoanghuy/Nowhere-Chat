@@ -3,6 +3,7 @@ package signup;
 import client.CommonClient;
 import gui.LoginWindow;
 import gui.MainWindow;
+import gui.RequestIPWindows;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -30,7 +31,7 @@ public class signup {
 
         signUpButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                CommonClient ins = new CommonClient();
+                CommonClient ins = RequestIPWindows.common_client;
                 if (txtusername.getText().isEmpty() | txtName.getText().isEmpty() | txtemail.getText().isEmpty() | txtpassword.getText().isEmpty()| phone.getText().isEmpty()  )
                     JOptionPane.showMessageDialog(null, "Please type full");
                 else if(maleRadioButton.isSelected() | femaleRadioButton.isSelected() | otherRadioButton.isSelected()) {

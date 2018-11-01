@@ -1,25 +1,39 @@
 package client;
+
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 import data.user;
+
+import java.util.Arrays;
 import java.util.List;
-
 import gui.RequestIPWindows;
-import gui.RequestIPWindows.*;
-
 import javax.swing.*;
 
 public class CommonClient {
+    private Socket sock;
+    private ObjectOutputStream os;
+    private ObjectInputStream is;
+
+    public CommonClient(){
+        try {
+            this.sock = new Socket(RequestIPWindows.ip_server, 7000);
+            this.os = new ObjectOutputStream(sock.getOutputStream());
+            this.is = new ObjectInputStream(sock.getInputStream());
+        }
+        catch (UnknownHostException u) {
+            JOptionPane.showMessageDialog(null, "Can't find this Server! Are you sure the Server's IP is correct?");
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+
     private Object requestServer(Object obj) {
         Object rs = null;
         try {
-            Socket sock = new Socket(RequestIPWindows.ip_server, 7000);
-            ObjectOutputStream os = new ObjectOutputStream(sock.getOutputStream());
-            ObjectInputStream is = new ObjectInputStream(sock.getInputStream());
             os.writeObject(obj);
             rs = is.readObject();
-            sock.close();
         }
         catch (UnknownHostException u) {
             JOptionPane.showMessageDialog(null, "Can't find this Server! Are you sure the Server's IP is correct?");
@@ -106,5 +120,20 @@ public class CommonClient {
         req.add(usrname1);
         req.add(usrname2);
         return (boolean) this.requestServer(req);
+    }
+    public void closeConnection() {
+        ArrayList<String> req = new ArrayList<>(1);
+        req.add("close connection");
+        this.requestServer(req);
+    }
+    public String testConnection() {
+        ArrayList<String> req = new ArrayList<>(1);
+        req.add("test connection");
+        return (String) this.requestServer(req);
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        this.sock.close();
     }
 }

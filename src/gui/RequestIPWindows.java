@@ -1,5 +1,6 @@
 package gui;
 
+import client.CommonClient;
 import gui.LoginWindow;
 
 import javax.swing.*;
@@ -18,12 +19,12 @@ public class RequestIPWindows {
     private JPanel mainPanel;
     private JTextField IPtextField;
     private JButton LoginButton;
-    static public String ip_server = "localhost";
+    static public String ip_server;
     private JFrame this_frame;
+    static public CommonClient common_client;
 
     public RequestIPWindows(JFrame f) {
         this_frame = f;
-
         LoginButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -31,23 +32,12 @@ public class RequestIPWindows {
                     JOptionPane.showMessageDialog(mainPanel, "Please enter your Server's IP");
                 }
                 else {
-                    try {
-                        Socket sock = new Socket(IPtextField.getText(), 7000);
-                        ObjectOutputStream os = new ObjectOutputStream(sock.getOutputStream());
-                        ArrayList<String> arr = new ArrayList<>();
-                        arr.add("Test connection");
-                        os.writeObject(arr);
-                        sock.close();
-                    }
-                    catch (UnknownHostException u) {
-                        JOptionPane.showMessageDialog(this_frame, "Can't find this Server! Are you sure the Server's IP is correct?");
-                        return;
-                    }
-                    catch (IOException s) {
-                        JOptionPane.showMessageDialog(this_frame, s.getMessage());
-                        return;
-                    }
                     ip_server = IPtextField.getText();
+                    common_client = new CommonClient();
+                    String str = common_client.testConnection();
+                    if (str == null) {
+                        return;
+                    }
                     JFrame frame = new JFrame("Nowhere Chat");
                     frame.setContentPane(new LoginWindow(frame).getMainPanel());
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

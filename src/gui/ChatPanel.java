@@ -72,7 +72,7 @@ public class ChatPanel {
         return this.mainPanel;
     }
 
-    void send() {
+    private void send() {
         try {
             dataSocket obj = new dataSocket(user.getName() + ": " + messageTextField.getText());
             pr.writeObject(obj);

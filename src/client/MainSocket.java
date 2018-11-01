@@ -12,14 +12,11 @@ import data.*;
 public class MainSocket extends SwingWorker {
     private ServerSocket server;
     private user usr;
-    private int port;
     private TreeMap<String, ChatPanel> list_chat_sessions;
     private ArrayList<user> list_recent_chats;
-    private int this_port;
 
     public MainSocket(user usr, TreeMap<String, ChatPanel> list_chat_sessions, ArrayList<user> list_chat_conversations) throws Exception {
         this.usr = usr;
-        this.port = usr.getPort();
         this.list_chat_sessions = list_chat_sessions;
         this.list_recent_chats = list_chat_conversations;
         this.server = new ServerSocket(0);
@@ -42,7 +39,6 @@ public class MainSocket extends SwingWorker {
         private Socket client;
         private TreeMap<String, ChatPanel> list_chat_sessions;
         private ArrayList<user> list_recent_chats;
-        private ChatPanel chatpanel;
         private user usr;
 
         public chat_sessions(user u, Socket s, TreeMap<String, ChatPanel> list_chat_sessions, ArrayList<user> list_chat_conversations) {
@@ -63,7 +59,7 @@ public class MainSocket extends SwingWorker {
                 }
             }
             catch (Exception e) {
-                System.out.println("Error at create new chat session!");
+                JOptionPane.showMessageDialog(null, "Error at creating new chat session!");
             }
         }
     }
