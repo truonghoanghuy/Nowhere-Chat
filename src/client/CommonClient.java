@@ -124,7 +124,13 @@ public class CommonClient {
     public void closeConnection() {
         ArrayList<String> req = new ArrayList<>(1);
         req.add("close connection");
-        this.requestServer(req);
+        try {
+            os.writeObject(req);
+            this.sock.close();
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }
     public String testConnection() {
         ArrayList<String> req = new ArrayList<>(1);

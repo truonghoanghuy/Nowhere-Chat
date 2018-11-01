@@ -11,6 +11,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import client.CommonClient;
@@ -52,8 +53,30 @@ public class MainWindow {
         this.list_recent_chats = new ArrayList<>();
         this.list_chat_sessions = new TreeMap<>();
         this.list_not_friend = new ArrayList<>();
-        this.c = RequestIPWindows.common_client;
+        RequestIPWindows.common_client.closeConnection();
+        this.c = new CommonClient();
         c.setOnlineStatus(cur_user.getUser_name(), true);
+
+        SwingWorker w = new SwingWorker() {
+            @Override
+            protected Object doInBackground() throws Exception {
+                while(true) {
+                    for (Map.Entry<String, ChatPanel> entry : list_chat_sessions.entrySet()) {
+                        user usr = c.findUser(entry.getKey());
+                        if (!usr.getStatus()) {
+                            list_chat_sessions.remove(entry.getKey());
+                            for (user ur : list_recent_chats) {
+                                if (ur.getUser_name().equals(usr.getUser_name())) {
+                                    list_recent_chats.remove(ur);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        w.execute();
 
         try {
             this.main_socket = new MainSocket(cur_user, list_chat_sessions, list_recent_chats);
@@ -80,6 +103,7 @@ public class MainWindow {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
                 c.setOnlineStatus(cur_user.getUser_name(), false);
+                c.closeConnection();
             }
         });
 
@@ -91,6 +115,7 @@ public class MainWindow {
                 frame.setSize(800, 500);
                 frame.setVisible(true);
                 c.setOnlineStatus(cur_user.getUser_name(), false);
+                c.closeConnection();
                 this_frame.dispose();
             }
         });
@@ -143,24 +168,31 @@ public class MainWindow {
             @Override
             public void mouseReleased(MouseEvent e) {
                 contentPanel.removeAll();
-                try {
-                    int idx = listfriend.getSelectedIndex();
-                    if (!list_chat_sessions.containsKey(list_onine_friends.get(idx).getUser_name())) {
-                        user usr = c.findUser(list_onine_friends.get(idx).getUser_name());
-                        Socket s = new Socket(usr.getIp_address(), usr.getPort());
-                        ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
-                        ObjectInputStream in = new ObjectInputStream(s.getInputStream());
-                        out.writeObject(user);
-                        ChatPanel new_chat = new ChatPanel(listfriend.getSelectedValue().toString(), s, cur_user, out, in);
-                        list_chat_sessions.put(list_onine_friends.get(idx).getUser_name(), new_chat);
-                        list_recent_chats.add(list_onine_friends.get(idx));
+                SwingWorker worker = new SwingWorker() {
+                    @Override
+                    protected Object doInBackground() throws Exception {
+                        try {
+                            int idx = listfriend.getSelectedIndex();
+                            if (!list_chat_sessions.containsKey(list_onine_friends.get(idx).getUser_name())) {
+                                user usr = c.findUser(list_onine_friends.get(idx).getUser_name());
+                                Socket s = new Socket(usr.getIp_address(), usr.getPort());
+                                ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
+                                ObjectInputStream in = new ObjectInputStream(s.getInputStream());
+                                out.writeObject(user);
+                                ChatPanel new_chat = new ChatPanel(listfriend.getSelectedValue().toString(), s, cur_user, out, in);
+                                list_chat_sessions.put(list_onine_friends.get(idx).getUser_name(), new_chat);
+                                list_recent_chats.add(list_onine_friends.get(idx));
+                            }
+                            contentPanel.add(list_chat_sessions.get(list_onine_friends.get(idx).getUser_name()).getMainPanel());
+                            contentPanel.repaint();
+                            contentPanel.revalidate();
+                        } catch (Exception exc) {
+                            JOptionPane.showMessageDialog(this_frame, exc.getMessage());
+                        }
+                        return null;
                     }
-                    contentPanel.add(list_chat_sessions.get(list_onine_friends.get(idx).getUser_name()).getMainPanel());
-                    contentPanel.repaint();
-                    contentPanel.revalidate();
-                } catch (Exception exc) {
-                    JOptionPane.showMessageDialog(this_frame, exc.getMessage());
-                }
+                };
+                worker.execute();
             }
         });
     }
