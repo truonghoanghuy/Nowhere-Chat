@@ -29,6 +29,10 @@ public class CommonClient {
         }
     }
 
+    public Socket getSocket() {
+        return this.sock;
+    }
+
     private Object requestServer(Object obj) {
         Object rs = null;
         try {

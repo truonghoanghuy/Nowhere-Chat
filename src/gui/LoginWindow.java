@@ -19,6 +19,9 @@ public class LoginWindow {
 
     public LoginWindow(JFrame f) {
         this.this_frame = f;
+        if (RequestIPWindows.common_client.getSocket().isClosed()) {
+            RequestIPWindows.common_client = new CommonClient();
+        }
 
         signUpButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

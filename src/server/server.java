@@ -91,6 +91,8 @@ public class server {
                 ObjectOutputStream os = new ObjectOutputStream(sock.getOutputStream());
                 ObjectInputStream is = new ObjectInputStream(sock.getInputStream());
                 while (true) {
+                    if (this.sock.isClosed())
+                        break;
                     ArrayList<String> req = (ArrayList<String>) is.readObject();
                     System.out.println("new client is accepted: " + req.get(0));
 

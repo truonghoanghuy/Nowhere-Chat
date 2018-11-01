@@ -41,6 +41,7 @@ public class MainWindow {
     private List<user> friendslist;
     private MainSocket main_socket;
     private CommonClient c;
+    SwingWorker w;
 
     public JPanel getMainPanel(){
         return this.mainPanel;
@@ -57,10 +58,10 @@ public class MainWindow {
         this.c = new CommonClient();
         c.setOnlineStatus(cur_user.getUser_name(), true);
 
-        SwingWorker w = new SwingWorker() {
+        w = new SwingWorker() {
             @Override
             protected Object doInBackground() throws Exception {
-                while(true) {
+                abc: while(true) {
                     for (Map.Entry<String, ChatPanel> entry : list_chat_sessions.entrySet()) {
                         user usr = c.findUser(entry.getKey());
                         if (!usr.getStatus()) {
@@ -77,7 +78,6 @@ public class MainWindow {
             }
         };
         w.execute();
-
         try {
             this.main_socket = new MainSocket(cur_user, list_chat_sessions, list_recent_chats);
         } catch (Exception e) {
@@ -103,7 +103,7 @@ public class MainWindow {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
                 c.setOnlineStatus(cur_user.getUser_name(), false);
-                c.closeConnection();
+                close();
             }
         });
 
@@ -115,7 +115,7 @@ public class MainWindow {
                 frame.setSize(800, 500);
                 frame.setVisible(true);
                 c.setOnlineStatus(cur_user.getUser_name(), false);
-                c.closeConnection();
+                close();
                 this_frame.dispose();
             }
         });
@@ -240,5 +240,10 @@ public class MainWindow {
             dml.addElement(elem.getName());
         }
         friends.setModel(dml);
+    }
+
+    void close() {
+        c.closeConnection();
+        w.cancel(true);
     }
 }
