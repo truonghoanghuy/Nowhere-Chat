@@ -88,11 +88,11 @@ public class CommonClient {
         req.add(String.valueOf(status));
         this.requestServer(req);
     }
-    public ArrayList<String> getOnlinePeople(String usrname) {
+    public ArrayList<user> getOnlinePeople(String usrname) {
         ArrayList<String> req = new ArrayList<>(2);
         req.add("getOnlinePeople");
         req.add(usrname);
-        return (ArrayList<String>) this.requestServer(req);
+        return (ArrayList<user>) this.requestServer(req);
     }
     public ArrayList<String> getNotFriend(String usrname) {
         ArrayList<String> req = new ArrayList<>(2);

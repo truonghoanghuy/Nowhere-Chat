@@ -15,14 +15,8 @@ public class server {
     private SelectRecords sl;
     private UpdateRecords up;
     private InsertRecords ins;
-    public server() {
-        String workingDir = System.getProperty("user.dir");
-        String url = "jdbc:sqlite:" + workingDir + "/Data.db";
-        try {
-            this.conn = DriverManager.getConnection(url);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+    public server(Connection c) {
+        this.conn = c;
         sl = new SelectRecords(this.conn);
         up = new UpdateRecords(this.conn);
         ins = new InsertRecords(this.conn);
@@ -42,7 +36,7 @@ public class server {
     public void setOnlineStatus(String username, boolean stat) {
         up.updateStatus(username, stat);
     }
-    public ArrayList<String> getOnlinePeople(String usrname) {
+    public ArrayList<user> getOnlinePeople(String usrname) {
         return sl.getOnlinePeople(usrname);
     }
     public void insert(String name, String user_name,String email,String password,String gender,
@@ -59,76 +53,93 @@ public class server {
         return sl.checkfriendship(usrname1, usrname2);
     }
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        server serv = new server();
         System.out.println("This is IP of this server: " + Inet4Address.getLocalHost().getHostAddress());
         ServerSocket theServer = new ServerSocket(7000);
         while (true) {
             Socket sock = theServer.accept();
-            ObjectOutputStream os = new ObjectOutputStream(sock.getOutputStream());
-            ObjectInputStream is = new ObjectInputStream(sock.getInputStream());
-            ArrayList<String> req = (ArrayList<String>) is.readObject();
-            System.out.println("new client is accepted: " + req.get(0));
-            if (req.get(0).equals("Test connection")) {
-                //do nothing
-            }
-            else if (req.get(0).equals("login")) {
-                user canLogin = serv.checkLogin(req.get(1), req.get(2));
-                os.writeObject(canLogin);
-            }
-            else if (req.get(0).equals("finduser")) {
-                user usr = serv.findUser(req.get(1));
-                os.writeObject(usr);
-            }
-            else if (req.get(0).equals("selectfriends")) {
-                List<user> frds = serv.selectFriends(req.get(1));
-                os.writeObject(frds);
-            }
-            else if (req.get(0).equals("updateIpAndPort")) {
-                serv.updateIPandPort(req.get(1), req.get(2), Integer.parseInt(req.get(3)));
-                os.writeObject(null);
-            }
-            else if (req.get(0).equals("setonlinestatus")) {
-                serv.setOnlineStatus(req.get(1), Boolean.parseBoolean(req.get(2)));
-                os.writeObject(null);
-            }
-            else if (req.get(0).equals("getOnlinePeople")) {
-                ArrayList<String> people = serv.getOnlinePeople(req.get(1));
-                os.writeObject(people);
-            }
-            else if (req.get(0).equals("insert")) {
-                serv.insert(req.get(1),
-                        req.get(2),
-                        req.get(3),
-                        req.get(4),
-                        req.get(5),
-                        req.get(6),
-                        req.get(7),
-                        req.get(8),
-                        Boolean.parseBoolean(req.get(9)));
-                os.writeObject(null);
-            }
-            else if (req.get(0).equals("insertfriend")) {
-                serv.insertFriend(req.get(1), req.get(2));
-                os.writeObject(null);
-            }
-            else if (req.get(0).equals("getnotfriend")) {
-                ArrayList<String> people = serv.getNotFriend(req.get(1));
-                os.writeObject(people);
-            }
-            else if (req.get(0).equals("checkfriendship")) {
-                boolean ans = serv.checkFriendShip(req.get(1), req.get(2));
-                os.writeObject(ans);
-            }
-            sock.close();
+            new processRequest(sock).run();
         }
     }
 
-    public void finalize(){
-        try {
-            this.conn.close();
+    static class processRequest extends Thread {
+        Socket sock;
+
+        public processRequest(Socket s) {
+            this.sock = s;
         }
-        catch (Exception e) {
-            System.out.println(e);
+        public void run() {
+            String workingDir = System.getProperty("user.dir");
+            String url = "jdbc:sqlite:" + workingDir + "/Data.db";
+            Connection conn = null;
+            try {
+                conn = DriverManager.getConnection(url);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+            server serv = new server(conn);
+            try {
+                ObjectOutputStream os = new ObjectOutputStream(sock.getOutputStream());
+                ObjectInputStream is = new ObjectInputStream(sock.getInputStream());
+                ArrayList<String> req = (ArrayList<String>) is.readObject();
+                System.out.println("new client is accepted: " + req.get(0));
+                if (req.get(0).equals("Test connection")) {
+                    //do nothing
+                }
+                else if (req.get(0).equals("login")) {
+                    user canLogin = serv.checkLogin(req.get(1), req.get(2));
+                    os.writeObject(canLogin);
+                }
+                else if (req.get(0).equals("finduser")) {
+                    user usr = serv.findUser(req.get(1));
+                    os.writeObject(usr);
+                }
+                else if (req.get(0).equals("selectfriends")) {
+                    List<user> frds = serv.selectFriends(req.get(1));
+                    os.writeObject(frds);
+                }
+                else if (req.get(0).equals("updateIpAndPort")) {
+                    serv.updateIPandPort(req.get(1), req.get(2), Integer.parseInt(req.get(3)));
+                    os.writeObject(null);
+                }
+                else if (req.get(0).equals("setonlinestatus")) {
+                    serv.setOnlineStatus(req.get(1), Boolean.parseBoolean(req.get(2)));
+                    os.writeObject(null);
+                }
+                else if (req.get(0).equals("getOnlinePeople")) {
+                    ArrayList<user> people = serv.getOnlinePeople(req.get(1));
+                    os.writeObject(people);
+                }
+                else if (req.get(0).equals("insert")) {
+                    serv.insert(req.get(1),
+                            req.get(2),
+                            req.get(3),
+                            req.get(4),
+                            req.get(5),
+                            req.get(6),
+                            req.get(7),
+                            req.get(8),
+                            Boolean.parseBoolean(req.get(9)));
+                    os.writeObject(null);
+                }
+                else if (req.get(0).equals("insertfriend")) {
+                    serv.insertFriend(req.get(1), req.get(2));
+                    os.writeObject(null);
+                }
+                else if (req.get(0).equals("getnotfriend")) {
+                    ArrayList<String> people = serv.getNotFriend(req.get(1));
+                    os.writeObject(people);
+                }
+                else if (req.get(0).equals("checkfriendship")) {
+                    boolean ans = serv.checkFriendShip(req.get(1), req.get(2));
+                    os.writeObject(ans);
+                }
+                sock.close();
+                conn.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                //System.out.println(e.getMessage() + " " + e.getStackTrace());
+            }
         }
     }
 }

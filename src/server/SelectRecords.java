@@ -160,9 +160,9 @@ public class SelectRecords {
         return listFriends;
     }
 
-    public ArrayList<String> getOnlinePeople(String usrname) {
+    public ArrayList<user> getOnlinePeople(String usrname) {
         ArrayList<String> list = new ArrayList<>();
-        ArrayList<String> res = new ArrayList<>();
+        ArrayList<user> res = new ArrayList<>();
         String sql = "SELECT user_name1, user_name2 FROM friendship " +
                 "WHERE (user_name1 = '" + usrname + "' OR user_name2 = '" + usrname + "')";
         try {
@@ -191,7 +191,7 @@ public class SelectRecords {
                 Statement stmt1 = conn1.createStatement();
                 ResultSet rs1 = stmt1.executeQuery(sql1);
                 while (rs1.next()) {
-                    res.add(rs1.getString("user_name"));
+                    res.add(findUser(rs1.getString("user_name")));
                 }
                 stmt1.close();
                 rs1.close();

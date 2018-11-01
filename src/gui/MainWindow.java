@@ -33,10 +33,8 @@ public class MainWindow {
     private JList friends;
     private user user;
     private TreeMap<String, ChatPanel> list_chat_sessions;
-    private ArrayList<String> list_chat_conversations;
-    private ArrayList<String> list_name_chat_conversations;
-    private ArrayList<String> list_onine_friends;
-    private ArrayList<Integer> list_port_online_friends;
+    private ArrayList<user> list_recent_chats;
+    private ArrayList<user> list_onine_friends;
     private ArrayList<String> list_not_friend;
     private List<user> friendslist;
     private MainSocket main_socket;
@@ -49,15 +47,14 @@ public class MainWindow {
         this.this_frame = f;
         this.user = cur_user;
         this.nameText.setText(cur_user.getName());
-        this.list_chat_conversations = new ArrayList<>();
-        this.list_name_chat_conversations = new ArrayList<>();
+        this.list_recent_chats = new ArrayList<>();
         this.list_chat_sessions = new TreeMap<>();
         this.list_not_friend = new ArrayList<>();
         CommonClient c = new CommonClient();
         c.setOnlineStatus(cur_user.getUser_name(), true);
 
         try {
-            this.main_socket = new MainSocket(cur_user, list_chat_sessions, list_chat_conversations, list_name_chat_conversations);
+            this.main_socket = new MainSocket(cur_user, list_chat_sessions, list_recent_chats);
         }
         catch (Exception e) {
             JOptionPane.showMessageDialog(this_frame, e.getMessage());
@@ -115,6 +112,7 @@ public class MainWindow {
                 }
             }
         });
+
         listpeople.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -133,13 +131,14 @@ public class MainWindow {
         recent_chat.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                ChatPanel chat = list_chat_sessions.get(list_chat_conversations.get(recent_chat.getSelectedIndex()));
+                ChatPanel chat = list_chat_sessions.get(list_recent_chats.get(recent_chat.getSelectedIndex()).getUser_name());
                 contentPanel.removeAll();
                 contentPanel.add(chat.getMainPanel());
                 contentPanel.repaint();
                 contentPanel.revalidate();
             }
         });
+
         listfriend.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -149,22 +148,18 @@ public class MainWindow {
                     protected Void doInBackground() throws Exception {
                         try {
                             int idx = listfriend.getSelectedIndex();
-                            if (!list_chat_sessions.containsKey(list_onine_friends.get(idx))) {
+                            if (!list_chat_sessions.containsKey(list_onine_friends.get(idx).getUser_name())) {
                                 CommonClient cl = new CommonClient();
-                                user usr = cl.findUser(list_onine_friends.get(idx));
+                                user usr = cl.findUser(list_onine_friends.get(idx).getUser_name());
                                 Socket s = new Socket(usr.getIp_address(), usr.getPort());
                                 ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
                                 ObjectInputStream in = new ObjectInputStream(s.getInputStream());
-                                ArrayList<String> req = new ArrayList<>(2);
-                                req.add(cur_user.getUser_name());
-                                req.add(cur_user.getName());
-                                out.writeObject(req);
+                                out.writeObject(user);
                                 ChatPanel new_chat = new ChatPanel(listfriend.getSelectedValue().toString(), s, cur_user, out, in);
-                                list_chat_sessions.put(list_onine_friends.get(idx), new_chat);
-                                list_chat_conversations.add(list_onine_friends.get(idx));
-                                list_name_chat_conversations.add(listfriend.getSelectedValue().toString());
+                                list_chat_sessions.put(list_onine_friends.get(idx).getUser_name(), new_chat);
+                                list_recent_chats.add(list_onine_friends.get(idx));
                             }
-                            contentPanel.add(list_chat_sessions.get(list_onine_friends.get(idx)).getMainPanel());
+                            contentPanel.add(list_chat_sessions.get(list_onine_friends.get(idx).getUser_name()).getMainPanel());
                             contentPanel.repaint();
                             contentPanel.revalidate();
                         }
@@ -179,31 +174,26 @@ public class MainWindow {
         });
     }
 
-    void showOnlinePeople() {
+    private void showOnlinePeople() {
         list_onine_friends = new ArrayList<>();
-        list_port_online_friends = new ArrayList<>();
         DefaultListModel model = new DefaultListModel();
         CommonClient ins = new CommonClient();
-        ArrayList<String> list = ins.getOnlinePeople(user.getUser_name());
-        for (String elem : list) {
-            user usr = ins.findUser(elem);
-            //if (usr.getUser_name().equals(user.getUser_name()))
-                //continue;
+        ArrayList<user> list = ins.getOnlinePeople(user.getUser_name());
+        for (user elem : list) {
             list_onine_friends.add(elem);
-            list_port_online_friends.add(usr.getPort());
-            model.addElement(usr.getName());
+            model.addElement(elem.getName());
         }
+        listfriend.removeAll();
         listfriend.setModel(model);
     }
 
     void showRecentChat() {
+        recent_chat.removeAll();
         DefaultListModel dml = new DefaultListModel();
-        for (String name : list_name_chat_conversations) {
-            dml.addElement(name);
+        for (user u : list_recent_chats) {
+            dml.addElement(u.getName());
         }
         recent_chat.setModel(dml);
-//        listfriend.repaint();
-//        listfriend.revalidate();
     }
 
     void showNotFriend() {
