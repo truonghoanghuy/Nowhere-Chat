@@ -86,8 +86,8 @@ public class ChatPanel {
         catch (IOException ex) {
             JOptionPane.showMessageDialog(mainPanel, "Oops, this user is no longer online. So you can't send message to this user");
             messageTextField.setText("");
-            if (MainWindow.list_chat_sessions.containsKey(friend))
-                MainWindow.list_chat_sessions.remove(friend);
+            if (MainWindow.list_chat_sessions.containsKey(friend.getUser_name()))
+                MainWindow.list_chat_sessions.remove(friend.getUser_name());
             return;
         }
         textArea.append(user.getName() + ": " + messageTextField.getText()+ "\n");
