@@ -6,6 +6,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.event.*;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -61,7 +62,13 @@ public class MainWindow {
         }
 
         try {
-            c.updateIPAndPort(user.getUser_name(), InetAddress.getLocalHost().getHostAddress(), this.main_socket.getPort());
+            String ip = "";
+            try(final DatagramSocket socket = new DatagramSocket()){
+                socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+                ip = socket.getLocalAddress().getHostAddress();
+                socket.close();
+            }
+            c.updateIPAndPort(user.getUser_name(), ip, this.main_socket.getPort());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this_frame, e.getMessage());
         }

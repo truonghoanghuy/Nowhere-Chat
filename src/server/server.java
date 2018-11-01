@@ -62,7 +62,13 @@ public class server {
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        System.out.println("This is IP of this server: " + Inet4Address.getLocalHost().getHostAddress());
+        String ip;
+        try(final DatagramSocket socket = new DatagramSocket()){
+            socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+            ip = socket.getLocalAddress().getHostAddress();
+            socket.close();
+        }
+        System.out.println("This is IP of this server: " + ip);
         ServerSocket theServer = new ServerSocket(7000);
         server serv = new server();
         while (true) {
