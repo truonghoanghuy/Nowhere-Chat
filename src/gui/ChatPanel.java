@@ -88,6 +88,12 @@ public class ChatPanel {
             messageTextField.setText("");
             if (MainWindow.list_chat_sessions.containsKey(friend.getUser_name()))
                 MainWindow.list_chat_sessions.remove(friend.getUser_name());
+            for (user u : MainWindow.list_recent_chats) {
+                if (u.getUser_name().equals(friend.getUser_name())) {
+                    MainWindow.list_recent_chats.remove(u);
+                    break;
+                }
+            }
             return;
         }
         textArea.append(user.getName() + ": " + messageTextField.getText()+ "\n");

@@ -36,7 +36,7 @@ public class MainWindow {
     private JList friends;
     private user user;
     public static TreeMap<String, ChatPanel> list_chat_sessions;
-    private ArrayList<user> list_recent_chats;
+    public static ArrayList<user> list_recent_chats;
     private ArrayList<user> list_onine_friends;
     private ArrayList<String> list_not_friend;
     private List<user> friendslist;
@@ -182,7 +182,7 @@ public class MainWindow {
                                 out.writeObject(user);
                                 ChatPanel new_chat = new ChatPanel(listfriend.getSelectedValue().toString(), s, cur_user, usr, out, in);
                                 list_chat_sessions.put(list_onine_friends.get(idx).getUser_name(), new_chat);
-                                list_recent_chats.add(list_onine_friends.get(idx));
+                                list_recent_chats.add(usr);
                             }
                             contentPanel.add(list_chat_sessions.get(list_onine_friends.get(idx).getUser_name()).getMainPanel());
                             contentPanel.repaint();
