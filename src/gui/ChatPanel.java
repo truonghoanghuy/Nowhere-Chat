@@ -49,14 +49,21 @@ public class ChatPanel {
         chooseFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                File f = pickfile();
-                try {
-                    dataSocket obj = new dataSocket(f, user.getName());
-                    pr.writeObject(obj);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-                textArea.append(user.getName() + ": " + "Sending file " + f.getName() + " ..." + "\n");
+                SwingWorker worker = new SwingWorker() {
+                    @Override
+                    protected Object doInBackground() throws Exception {
+                        File f = pickfile();
+                        try {
+                            dataSocket obj = new dataSocket(f, user.getName());
+                            pr.writeObject(obj);
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                        textArea.append(user.getName() + ": " + "Sending file " + f.getName() + " ..." + "\n");
+                        return null;
+                    }
+                };
+                worker.execute();
             }
         });
 
